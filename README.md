@@ -49,7 +49,4 @@ The following diagram illustrates how the Farmer and the Admin interact with the
 
 ![Use Case Diagram](use-case-diagram.png)
 
-### 2. Entity-Relationship (ER) Diagram
-The database layout handling users, diagnostic results, and remedies.
 
-![ER Diagram](er-diagram.png)
