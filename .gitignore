@@ -5,3 +5,4 @@ database.db
 *.h5
 .env
 backend/static/uploads/
+plantvillage dataset/
