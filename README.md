@@ -151,6 +151,25 @@ The application currently supports disease diagnosis for:
 - Mango
 
 ---
+## Demo
+
+### Website home
+![Website](demo/website.png)
+
+### Login page
+![Login page](demo/login-page.png)
+
+### Dashboard
+![Dashboard](demo/dashboard.png)
+
+### Prediction - healthy crop
+![Prediction healthy output](demo/prediction-Healthy-output.png)
+
+### Prediction - diseased crop
+![Prediction disease output](demo/prediction-Disease-output.png)
+
+### Remedy suggestion
+![Remedy suggestion](demo/remedy-suggestion.png)
 
 # 📁 Project Structure
 
