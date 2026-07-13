@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-gray-100 font-sans antialiased overflow-x-hidden;
+    background-color: #030712; /* Dark background */
+  }
+
+  /* Custom Premium Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.5);
+  }
+}
+
+/* Glassmorphism panel styling */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5), 0 0 20px 2px rgba(16, 185, 129, 0.15);
+}
+
+/* Mouse Glow light layer */
+.mouse-glow-bg {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.03) 50%, transparent 100%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* Light Rays animation */
+.light-ray {
+  position: absolute;
+  top: -50%;
+  left: 30%;
+  width: 300px;
+  height: 200%;
+  background: linear-gradient(to bottom, rgba(16, 185, 129, 0.06), transparent);
+  transform: rotate(25deg);
+  transform-origin: top left;
+  animation: ray-sweep 15s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes ray-sweep {
+  0% { transform: rotate(20deg) scaleX(0.8); opacity: 0.3; }
+  100% { transform: rotate(30deg) scaleX(1.2); opacity: 0.7; }
+}
+
+/* Interactive custom elements */
+.glowing-circle {
+  filter: blur(80px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  border-radius: 9999px;
+  position: absolute;
+}
+
+/* Custom SVG path animations */
+.path-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 5s ease-in-out forwards infinite alternate;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
