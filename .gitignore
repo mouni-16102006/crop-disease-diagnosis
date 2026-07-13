@@ -1,8 +1,0 @@
-backend/venv/
-*.pyc
-__pycache__/
-database.db
-*.h5
-.env
-backend/static/uploads/
-plantvillage dataset/
