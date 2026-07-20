@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%" aria-label="CropDiag AI Logo">
+  <defs>
+    <!-- Premium Emerald-Green to Teal Gradient (Leaf Side) -->
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" /> <!-- Emerald -->
+      <stop offset="50%" stop-color="#059669" /> <!-- Deep Emerald -->
+      <stop offset="100%" stop-color="#065F46" /> <!-- Forest Green -->
+    </linearGradient>
+
+    <!-- Glowing Tech Cyan-Blue Gradient (Brain/CNN Side) -->
+    <linearGradient id="techGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4" /> <!-- Cyan -->
+      <stop offset="50%" stop-color="#3B82F6" /> <!-- Blue -->
+      <stop offset="100%" stop-color="#1E3A8A" /> <!-- Navy -->
+    </linearGradient>
+
+    <!-- Combined Green-Blue Gradient for Central Accents -->
+    <linearGradient id="hybridGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+
+    <!-- Radial Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Left Side: Organic Leaf Structure -->
+  <g id="organic-leaf">
+    <!-- Main Outer Leaf Shell -->
+    <path d="M 250,50 C 130,50 60,150 70,270 C 80,390 190,430 250,450 C 250,450 250,250 250,50 Z" 
+          fill="url(#leafGrad)" 
+          opacity="0.95" />
+          
+    <!-- Inner Leaf Vein Accents (Bioluminescent Green) -->
+    <path d="M 250,400 C 210,380 160,330 140,260" 
+          fill="none" 
+          stroke="#34D399" 
+          stroke-width="4" 
+          stroke-linecap="round" 
+          opacity="0.8" />
+    <path d="M 250,320 C 200,300 170,250 160,200" 
+          fill="none" 
+          stroke="#34D399" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          opacity="0.7" />
+    <path d="M 250,240 C 210,220 190,180 185,150" 
+          fill="none" 
+          stroke="#34D399" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          opacity="0.6" />
+  </g>
+
+  <!-- Right Side: CNN Tech Brain Nodes (Gradient Blue) -->
+  <g id="cnn-tech-brain" filter="url(#glow)">
+    <!-- Right Leaf Outline composed of Neural Connections -->
+    <path d="M 250,50 C 370,50 440,150 430,270 C 420,390 310,430 250,450" 
+          fill="none" 
+          stroke="url(#techGrad)" 
+          stroke-width="6" 
+          stroke-dasharray="8 8" 
+          stroke-linecap="round" />
+          
+    <!-- Neural Network Node Grid -->
+    <!-- Nodes -->
+    <circle cx="250" cy="50" r="10" fill="url(#hybridGrad)" />
+    <circle cx="340" cy="110" r="8" fill="#22D3EE" />
+    <circle cx="390" cy="180" r="9" fill="#3B82F6" />
+    <circle cx="410" cy="270" r="10" fill="#06B6D4" />
+    <circle cx="370" cy="360" r="8" fill="#3B82F6" />
+    <circle cx="300" cy="420" r="9" fill="#22D3EE" />
+    <circle cx="250" cy="450" r="10" fill="url(#hybridGrad)" />
+    
+    <!-- Inner Hidden Layer Nodes -->
+    <circle cx="300" cy="190" r="7" fill="#60A5FA" />
+    <circle cx="340" cy="260" r="8" fill="#38BDF8" />
+    <circle cx="310" cy="330" r="7" fill="#60A5FA" />
+
+    <!-- Synapses (Connection Lines) -->
+    <line x1="250" y1="50" x2="300" y2="190" stroke="#60A5FA" stroke-width="2" opacity="0.6" />
+    <line x1="340" y1="110" x2="300" y2="190" stroke="#60A5FA" stroke-width="2" opacity="0.6" />
+    <line x1="340" y1="110" x2="340" y2="260" stroke="#38BDF8" stroke-width="2" opacity="0.5" />
+    <line x1="390" y1="180" x2="340" y2="260" stroke="#38BDF8" stroke-width="2" opacity="0.6" />
+    <line x1="390" y1="180" x2="300" y2="190" stroke="#60A5FA" stroke-width="1.5" opacity="0.4" />
+    <line x1="410" y1="270" x2="340" y2="260" stroke="#38BDF8" stroke-width="3" opacity="0.7" />
+    <line x1="410" y1="270" x2="310" y2="330" stroke="#60A5FA" stroke-width="2" opacity="0.5" />
+    <line x1="370" y1="360" x2="310" y2="330" stroke="#60A5FA" stroke-width="2" opacity="0.6" />
+    <line x1="370" y1="360" x2="250" y2="450" stroke="#22D3EE" stroke-width="2" opacity="0.5" />
+    <line x1="300" y1="420" x2="310" y2="330" stroke="#38BDF8" stroke-width="2" opacity="0.5" />
+    <line x1="340" y1="260" x2="310" y2="330" stroke="#38BDF8" stroke-width="2.5" opacity="0.7" />
+    <line x1="300" y1="190" x2="340" y2="260" stroke="#38BDF8" stroke-width="2.5" opacity="0.7" />
+  </g>
+
+  <!-- Stem/Sprout Core connection (Combines Green & Blue) -->
+  <path d="M 250,450 C 240,410 240,300 250,250" 
+        fill="none" 
+        stroke="url(#hybridGrad)" 
+        stroke-width="8" 
+        stroke-linecap="round" />
+</svg>

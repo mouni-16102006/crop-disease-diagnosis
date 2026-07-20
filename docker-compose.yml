@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - FLASK_ENV=production
+    volumes:
+      - ./backend/database.db:/app/backend/database.db
+      - ./backend/static/uploads:/app/backend/static/uploads
+    restart: always

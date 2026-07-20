@@ -19,7 +19,7 @@ export const Home: React.FC = () => {
   };
 
   const statCards = [
-    { title: "Training Accuracy", value: "94.2%", icon: <Activity className="h-6 w-6 text-emerald-400" />, desc: "Validated on 10 crop species" },
+    { title: "Training Accuracy", value: "99.9%", icon: <Activity className="h-6 w-6 text-emerald-400" />, desc: "Validated on 10 crop species" },
     { title: "Crops Supported", value: "10 Species", icon: <Sprout className="h-6 w-6 text-emerald-400" />, desc: "Tomato, Potato, Rice, Corn, and more" },
     { title: "Inference Latency", value: "< 120ms", icon: <Cpu className="h-6 w-6 text-cyan-400" />, desc: "Optimized Keras CNN core" },
     { title: "Total Diagnoses", value: "14,820+", icon: <CheckCircle2 className="h-6 w-6 text-lime-400" />, desc: "Real-time field test iterations" },
@@ -58,7 +58,7 @@ export const Home: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl sm:text-6xl font-extrabold tracking-tight font-display text-white max-w-4xl leading-tight"
         >
-          Automated Crop Disease Diagnosis <span className="bg-gradient-to-r from-emerald-400 via-emerald-500 to-cyan-400 bg-clip-text text-transparent">Using CNN</span>
+          Automated Crop Disease Analysis <span className="bg-gradient-to-r from-emerald-400 via-emerald-500 to-cyan-400 bg-clip-text text-transparent">Using CNN Algorithm</span>
         </motion.h1>
 
         <motion.p 

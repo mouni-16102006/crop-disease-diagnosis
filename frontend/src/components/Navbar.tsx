@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Leaf, LogOut, User, LayoutDashboard, Upload, Shield, Menu, X, Home } from 'lucide-react';
+import { Leaf, LogOut, User, LayoutDashboard, Upload, Shield, Menu, X, Home, BookOpen, ShieldAlert, Compass } from 'lucide-react';
 import { BACKEND_URL } from '../services/api';
 
 interface NavbarProps {
@@ -29,9 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           {/* Logo & Brand */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2 text-white font-display font-semibold tracking-wider text-lg">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                <Leaf className="h-5 w-5 animate-pulse" />
-              </div>
+              <img src="/static/logo.svg" alt="CropDiag Logo" className="h-8 w-8 animate-pulse" />
               <span>CROPDIAG <span className="text-emerald-400 font-bold">AI</span></span>
             </Link>
           </div>
@@ -45,6 +43,18 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             <Link to="/upload" className={linkClass('/upload')}>
               <Upload className="h-4 w-4" />
               <span>Diagnose</span>
+            </Link>
+            <Link to="/risk" className={linkClass('/risk')}>
+              <ShieldAlert className="h-4 w-4" />
+              <span>Risk Forecast</span>
+            </Link>
+            <Link to="/encyclopedia" className={linkClass('/encyclopedia')}>
+              <BookOpen className="h-4 w-4" />
+              <span>Encyclopedia</span>
+            </Link>
+            <Link to="/about" className={linkClass('/about')}>
+              <Compass className="h-4 w-4" />
+              <span>About</span>
             </Link>
             <Link to="/dashboard" className={linkClass('/dashboard')}>
               <LayoutDashboard className="h-4 w-4" />
@@ -140,6 +150,36 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           >
             <Upload className="h-5 w-5" />
             <span>Diagnose</span>
+          </Link>
+          <Link
+            to="/risk"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium ${
+              isActive('/risk') ? 'text-emerald-400 bg-emerald-500/10' : 'text-gray-300'
+            }`}
+          >
+            <ShieldAlert className="h-5 w-5" />
+            <span>Risk Forecast</span>
+          </Link>
+          <Link
+            to="/encyclopedia"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium ${
+              isActive('/encyclopedia') ? 'text-emerald-400 bg-emerald-500/10' : 'text-gray-300'
+            }`}
+          >
+            <BookOpen className="h-5 w-5" />
+            <span>Encyclopedia</span>
+          </Link>
+          <Link
+            to="/about"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium ${
+              isActive('/about') ? 'text-emerald-400 bg-emerald-500/10' : 'text-gray-300'
+            }`}
+          >
+            <Compass className="h-5 w-5" />
+            <span>About Us</span>
           </Link>
           <Link
             to="/dashboard"

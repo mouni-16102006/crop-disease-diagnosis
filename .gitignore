@@ -1,0 +1,38 @@
+# Virtual environments
+backend/venv/
+venv/
+.venv/
+ENV/
+env/
+
+# Python caching & compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
+
+# Node.js dependencies & builds
+frontend/node_modules/
+node_modules/
+frontend/dist/
+dist/
+.eslintcache
+
+# Raw datasets (too large for Git / Render deployment)
+plantvillage dataset/
+plantvillage/
+dataset/
+
+# Desktop executables and build logs
+*.exe
+*.spec
+build/
+.gradle/
+local.properties
+.idea/
+
+# Local database files
+*.db-journal

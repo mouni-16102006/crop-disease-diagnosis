@@ -16,6 +16,12 @@ import Prediction from './pages/Prediction';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import AdminPanel from './pages/AdminPanel';
+import RiskPredictor from './pages/RiskPredictor';
+import Encyclopedia from './pages/Encyclopedia';
+import About from './pages/About';
+
+// Components
+import Chatbot from './components/Chatbot';
 
 import authService from './services/firebase';
 
@@ -154,10 +160,49 @@ export const App: React.FC = () => {
               } 
             />
 
+            {/* New Features Routes */}
+            <Route 
+              path="/risk" 
+              element={
+                <div className="flex w-full bg-[#030712]">
+                  {user && <Sidebar user={user} />}
+                  <main className="flex-1 min-w-0">
+                    <RiskPredictor />
+                  </main>
+                </div>
+              } 
+            />
+
+            <Route 
+              path="/encyclopedia" 
+              element={
+                <div className="flex w-full bg-[#030712]">
+                  {user && <Sidebar user={user} />}
+                  <main className="flex-1 min-w-0">
+                    <Encyclopedia />
+                  </main>
+                </div>
+              } 
+            />
+
+            <Route 
+              path="/about" 
+              element={
+                <div className="flex w-full bg-[#030712]">
+                  {user && <Sidebar user={user} />}
+                  <main className="flex-1 min-w-0">
+                    <About />
+                  </main>
+                </div>
+              } 
+            />
+
             {/* Redirect unknown routes */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
+        {/* Floating AI Chatbot Assistant */}
+        <Chatbot />
       </div>
     </Router>
   );
