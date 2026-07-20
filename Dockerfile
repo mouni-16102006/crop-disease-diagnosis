@@ -21,4 +21,4 @@ COPY --from=frontend-builder /frontend/dist ./frontend/dist
 
 EXPOSE 8080
 WORKDIR /app/backend
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
+CMD gunicorn --bind 0.0.0.0:$PORT app:app
