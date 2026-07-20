@@ -10,11 +10,7 @@ RUN npm run build
 FROM python:3.10-slim
 WORKDIR /app
 
-# Install system libraries for OpenCV
-RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    && rm -rf /var/lib/apt/lists/*
+# Headless container setup (no graphical GUI dependencies required)
 
 COPY backend/requirements.txt ./backend/
 RUN pip install --no-cache-dir -r backend/requirements.txt
