@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./backend/static/logo.svg" alt="CropDiag AI Logo" width="150" height="150">
+</p>
+
 # 🌱 Automated Crop Disease Diagnosis using CNN
 
 > ** Third Year B.Tech (Artificial Intelligence & Data Science) Project**
