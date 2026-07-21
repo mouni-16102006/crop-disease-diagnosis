@@ -30,13 +30,25 @@
 
 ---
 
-# 🚀 Local Application URL
+# 🌐 Live Demo & Public Deployment
 
-The application runs as a unified full-stack project.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-brightgreen?style=for-the-badge&logo=render)](https://crop-disease-diagnosis-1-3amx.onrender.com/)
 
-**Application URL**
+- **Live Production URL:** **[https://crop-disease-diagnosis-1-3amx.onrender.com/](https://crop-disease-diagnosis-1-3amx.onrender.com/)**
+- **Local Application URL:** `http://127.0.0.1:8080/`
 
-http://127.0.0.1:8080/
+---
+
+# 📸 Application Interface & Demo
+
+| Feature | Screenshot |
+| :--- | :--- |
+| **Homepage** | ![Website Homepage](./demo/website.png.png) |
+| **Analytics Dashboard** | ![Dashboard](./demo/dashboard.png.jpeg) |
+| **Authentication System** | ![Login Page](./demo/login-page.png.jpg) |
+| **Disease Prediction Output** | ![Disease Prediction](./demo/prediction-Disease-output.png.png) |
+| **Healthy Leaf Analysis** | ![Healthy Leaf Analysis](./demo/prediction-Healthy-output.png.jpeg) |
+| **Treatment & Remedy Suggestions** | ![Remedy Suggestions](./demo/remedy-suggestion.png.png) |
 
 ---
 
