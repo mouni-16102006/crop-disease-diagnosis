@@ -233,21 +233,13 @@ Fallback
 
 ## 📸 Application Gallery
 
-| Homepage | AI Prediction |
-|----------|---------------|
-| <a href="./sc/website.png"><img src="./sc/website.png" width="500"></a> | <a href="./sc/output1.png"><img src="./sc/output1.png" width="500"></a> |
-
-| Upload | Treatment |
-|--------|-----------|
-| <a href="./sc/input.png"><img src="./sc/input.png" width="500"></a> | <a href="./sc/reme.png"><img src="./sc/reme.png" width="500"></a> |
-
-| Encyclopedia | Risk Predictor |
-|--------------|----------------|
-| <a href="./sc/ency.png"><img src="./sc/ency.png" width="500"></a> | <a href="./sc/risk-factor.png"><img src="./sc/risk-factor.png" width="500"></a> |
-
-| Accuracy |
-|----------|
-| <a href="./sc/accuracy.png"><img src="./sc/accuracy.png" width="700"></a> |
+<p align="center">
+  <a href="./sc/website.png">
+    <img src="./sc/website.png"
+         alt="Homepage"
+         width="900">
+  </a>
+</p>
 ---
 
 # 🚀 Future Enhancements
