@@ -231,15 +231,48 @@ Fallback
 
 # 📸 Application Screenshots
 
-## 📸 Application Gallery
+## 🏠 Homepage
 
 <p align="center">
-  <a href="./sc/website.png">
-    <img src="./sc/website.png"
-         alt="Homepage"
-         width="900">
-  </a>
+<img src="./sc/website%20.jpeg" width="100%">
 </p>
+
+## 📤 Upload Page
+
+<p align="center">
+<img src="./sc/input.jpeg" width="100%">
+</p>
+
+## 🔍 Prediction Result
+
+<p align="center">
+<img src="./sc/output1.jpeg" width="100%">
+</p>
+
+## 💊 Treatment Suggestions
+
+<p align="center">
+<img src="./sc/reme.jpeg" width="100%">
+</p>
+
+## 📚 Crop Encyclopedia
+
+<p align="center">
+<img src="./sc/ency.jpeg" width="100%">
+</p>
+
+## ⚠ Disease Risk Predictor
+
+<p align="center">
+<img src="./sc/risk%20factor.jpeg" width="100%">
+</p>
+
+## 📈 Training Accuracy
+
+<p align="center">
+<img src="./sc/accuracy.jpeg" width="100%">
+</p>
+
 ---
 
 # 🚀 Future Enhancements
