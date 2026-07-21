@@ -2,6 +2,7 @@ services:
   - type: web
     name: cropdiag-ai
     env: python
+    plan: free
     buildCommand: pip install -r backend/requirements.txt && cd frontend && npm install && npm run build && cd ..
     startCommand: gunicorn --bind 0.0.0.0:$PORT --chdir backend app:app
     envVars:
