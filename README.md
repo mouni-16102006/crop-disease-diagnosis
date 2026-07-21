@@ -6,6 +6,14 @@
 
 ---
 
+# 🌐 Live Demo
+
+**🔗 Try it live:** [https://crop-disease-diagnosis-1-3amx.onrender.com/](https://crop-disease-diagnosis-1-3amx.onrender.com/)
+
+![Website Preview](demo/website.png)
+
+---
+
 # 👩‍🎓 Project Information
 
 **Project Title:** Automated Crop Disease Diagnosis using CNN
