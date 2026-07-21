@@ -45,14 +45,42 @@
 
 # 📸 Application Interface & Demo
 
-| Feature | Screenshot |
-| :--- | :--- |
-| **Homepage** | ![Website Homepage](./demo/website.png.png) |
-| **Analytics Dashboard** | ![Dashboard](./demo/dashboard.png.jpeg) |
-| **Authentication System** | ![Login Page](./demo/login-page.png.jpg) |
-| **Disease Prediction Output** | ![Disease Prediction](./demo/prediction-Disease-output.png.png) |
-| **Healthy Leaf Analysis** | ![Healthy Leaf Analysis](./demo/prediction-Healthy-output.png.jpeg) |
-| **Treatment & Remedy Suggestions** | ![Remedy Suggestions](./demo/remedy-suggestion.png.png) |
+### 🏠 Website Homepage
+<p align="center">
+  <img src="./sc/website%20.jpeg" alt="Website Homepage" width="100%">
+</p>
+
+### 📥 Image Upload Input
+<p align="center">
+  <img src="./sc/input.jpeg" alt="Image Upload Input" width="100%">
+</p>
+
+### 🔬 AI Diagnosis Output
+<p align="center">
+  <img src="./sc/output1.jpeg" alt="AI Diagnosis Output" width="100%">
+</p>
+
+### 💊 Remedy Suggestions
+<p align="center">
+  <img src="./sc/reme.jpeg" alt="Remedy Suggestions" width="100%">
+</p>
+
+### 📖 Crop Encyclopedia
+<p align="center">
+  <img src="./sc/ency.jpeg" alt="Crop Encyclopedia" width="100%">
+</p>
+
+### ⚠️ Disease Risk Predictor
+<p align="center">
+  <img src="./sc/risk%20factor.jpeg" alt="Disease Risk Predictor" width="100%">
+</p>
+
+### 📊 Model Accuracy & Training Metrics
+<p align="center">
+  <img src="./sc/accuracy.jpeg" alt="Model Accuracy" width="100%">
+</p>
+
+---
 
 ---
 
@@ -178,22 +206,25 @@ The application currently supports disease diagnosis for:
 ## Demo
 
 ### Website home
-![Website](demo/website.png.png)
+![Website](sc/website%20.jpeg)
 
-### Login page
-![Login page](demo/login-page.png.jpg)
+### Image Upload Input
+![Image Upload Input](sc/input.jpeg)
 
-### Dashboard
-![Dashboard](demo/dashboard.png.jpeg)
+### AI Diagnosis Output
+![AI Diagnosis Output](sc/output1.jpeg)
 
-### Prediction - healthy crop
-![Prediction healthy output](demo/prediction-Healthy-output.png.jpeg)
+### Remedy Suggestions
+![Remedy Suggestions](sc/reme.jpeg)
 
-### Prediction - diseased crop
-![Prediction disease output](demo/prediction-Disease-output.png.png)
+### Crop Encyclopedia
+![Crop Encyclopedia](sc/ency.jpeg)
 
-### Remedy suggestion
-![Remedy suggestion](demo/remedy-suggestion.png.png)
+### Disease Risk Predictor
+![Disease Risk Predictor](sc/risk%20factor.jpeg)
+
+### Model Accuracy & Training Metrics
+![Model Accuracy](sc/accuracy.jpeg)
 
 # 📁 Project Structure
 
