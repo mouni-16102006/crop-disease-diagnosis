@@ -22,6 +22,7 @@ COPY --from=frontend-builder /frontend/dist ./frontend/dist
 # Create compatibility symlink inside /app/backend to handle cached --chdir backend commands
 RUN cd ./backend && ln -s . backend
 
+ENV PORT=8080
 EXPOSE 8080
 WORKDIR /app/backend
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-8080} app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
