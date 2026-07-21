@@ -178,22 +178,22 @@ The application currently supports disease diagnosis for:
 ## Demo
 
 ### Website home
-![Website](demo/website.png)
+![Website](demo/website.png.png)
 
 ### Login page
-![Login page](demo/login-page.png)
+![Login page](demo/login-page.png.jpg)
 
 ### Dashboard
-![Dashboard](demo/dashboard.png)
+![Dashboard](demo/dashboard.png.jpeg)
 
 ### Prediction - healthy crop
-![Prediction healthy output](demo/prediction-Healthy-output.png)
+![Prediction healthy output](demo/prediction-Healthy-output.png.jpeg)
 
 ### Prediction - diseased crop
-![Prediction disease output](demo/prediction-Disease-output.png)
+![Prediction disease output](demo/prediction-Disease-output.png.png)
 
 ### Remedy suggestion
-![Remedy suggestion](demo/remedy-suggestion.png)
+![Remedy suggestion](demo/remedy-suggestion.png.png)
 
 # 📁 Project Structure
 
