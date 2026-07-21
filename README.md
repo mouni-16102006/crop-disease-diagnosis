@@ -43,48 +43,7 @@
 
 ---
 
-# 📸 Application Interface & Demo
-
-### 🏠 Website Homepage
-<p align="center">
-  <img src="./sc/website%20.jpeg" alt="Website Homepage" width="100%">
-</p>
-
-### 📥 Image Upload Input
-<p align="center">
-  <img src="./sc/input.jpeg" alt="Image Upload Input" width="100%">
-</p>
-
-### 🔬 AI Diagnosis Output
-<p align="center">
-  <img src="./sc/output1.jpeg" alt="AI Diagnosis Output" width="100%">
-</p>
-
-### 💊 Remedy Suggestions
-<p align="center">
-  <img src="./sc/reme.jpeg" alt="Remedy Suggestions" width="100%">
-</p>
-
-### 📖 Crop Encyclopedia
-<p align="center">
-  <img src="./sc/ency.jpeg" alt="Crop Encyclopedia" width="100%">
-</p>
-
-### ⚠️ Disease Risk Predictor
-<p align="center">
-  <img src="./sc/risk%20factor.jpeg" alt="Disease Risk Predictor" width="100%">
-</p>
-
-### 📊 Model Accuracy & Training Metrics
-<p align="center">
-  <img src="./sc/accuracy.jpeg" alt="Model Accuracy" width="100%">
-</p>
-
----
-
----
-
-# 📖 Project Overview
+# 📖 Project Overview & Problem Statement
 
 Agriculture is one of the most important sectors contributing to food production worldwide. Early identification of crop diseases helps farmers minimize crop losses and improve productivity.
 
@@ -203,28 +162,6 @@ The application currently supports disease diagnosis for:
 - Mango
 
 ---
-## Demo
-
-### Website home
-![Website](sc/website%20.jpeg)
-
-### Image Upload Input
-![Image Upload Input](sc/input.jpeg)
-
-### AI Diagnosis Output
-![AI Diagnosis Output](sc/output1.jpeg)
-
-### Remedy Suggestions
-![Remedy Suggestions](sc/reme.jpeg)
-
-### Crop Encyclopedia
-![Crop Encyclopedia](sc/ency.jpeg)
-
-### Disease Risk Predictor
-![Disease Risk Predictor](sc/risk%20factor.jpeg)
-
-### Model Accuracy & Training Metrics
-![Model Accuracy](sc/accuracy.jpeg)
 
 # 📁 Project Structure
 
@@ -429,6 +366,45 @@ The application follows secure development practices including:
 - Reduce manual inspection time.
 - Provide instant prediction reports.
 - Assist farmers in early disease management.
+
+---
+
+# 📸 Application Interface & Demo
+
+### 🏠 Website Homepage
+<p align="center">
+  <img src="./sc/website%20.jpeg" alt="Website Homepage" width="100%">
+</p>
+
+### 📥 Image Upload Input
+<p align="center">
+  <img src="./sc/input.jpeg" alt="Image Upload Input" width="100%">
+</p>
+
+### 🔬 AI Diagnosis Output
+<p align="center">
+  <img src="./sc/output1.jpeg" alt="AI Diagnosis Output" width="100%">
+</p>
+
+### 💊 Remedy Suggestions
+<p align="center">
+  <img src="./sc/reme.jpeg" alt="Remedy Suggestions" width="100%">
+</p>
+
+### 📖 Crop Encyclopedia
+<p align="center">
+  <img src="./sc/ency.jpeg" alt="Crop Encyclopedia" width="100%">
+</p>
+
+### ⚠️ Disease Risk Predictor
+<p align="center">
+  <img src="./sc/risk%20factor.jpeg" alt="Disease Risk Predictor" width="100%">
+</p>
+
+### 📊 Model Accuracy & Training Metrics
+<p align="center">
+  <img src="./sc/accuracy.jpeg" alt="Model Accuracy" width="100%">
+</p>
 
 ---
 
