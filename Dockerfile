@@ -19,6 +19,9 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 COPY backend/ ./backend/
 COPY --from=frontend-builder /frontend/dist ./frontend/dist
 
+# Create compatibility symlink inside /app/backend to handle cached --chdir backend commands
+RUN cd ./backend && ln -s . backend
+
 EXPOSE 8080
 WORKDIR /app/backend
 CMD gunicorn --bind 0.0.0.0:$PORT app:app
