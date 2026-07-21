@@ -231,48 +231,23 @@ Fallback
 
 # 📸 Application Screenshots
 
-## 🏠 Homepage
+## 📸 Application Gallery
 
-<p align="center">
-<img src="./sc/website%20.jpeg" width="100%">
-</p>
+| Homepage | AI Prediction |
+|----------|---------------|
+| <a href="./sc/website.png"><img src="./sc/website.png" width="500"></a> | <a href="./sc/output1.png"><img src="./sc/output1.png" width="500"></a> |
 
-## 📤 Upload Page
+| Upload | Treatment |
+|--------|-----------|
+| <a href="./sc/input.png"><img src="./sc/input.png" width="500"></a> | <a href="./sc/reme.png"><img src="./sc/reme.png" width="500"></a> |
 
-<p align="center">
-<img src="./sc/input.jpeg" width="100%">
-</p>
+| Encyclopedia | Risk Predictor |
+|--------------|----------------|
+| <a href="./sc/ency.png"><img src="./sc/ency.png" width="500"></a> | <a href="./sc/risk-factor.png"><img src="./sc/risk-factor.png" width="500"></a> |
 
-## 🔍 Prediction Result
-
-<p align="center">
-<img src="./sc/output1.jpeg" width="100%">
-</p>
-
-## 💊 Treatment Suggestions
-
-<p align="center">
-<img src="./sc/reme.jpeg" width="100%">
-</p>
-
-## 📚 Crop Encyclopedia
-
-<p align="center">
-<img src="./sc/ency.jpeg" width="100%">
-</p>
-
-## ⚠ Disease Risk Predictor
-
-<p align="center">
-<img src="./sc/risk%20factor.jpeg" width="100%">
-</p>
-
-## 📈 Training Accuracy
-
-<p align="center">
-<img src="./sc/accuracy.jpeg" width="100%">
-</p>
-
+| Accuracy |
+|----------|
+| <a href="./sc/accuracy.png"><img src="./sc/accuracy.png" width="700"></a> |
 ---
 
 # 🚀 Future Enhancements
