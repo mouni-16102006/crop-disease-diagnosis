@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Leaf, LogOut, User, LayoutDashboard, Upload, Shield, Menu, X, Home, BookOpen, ShieldAlert, Compass } from 'lucide-react';
+import { LogOut, User, LayoutDashboard, Upload, Shield, Menu, X, Home, BookOpen, ShieldAlert, Compass } from 'lucide-react';
 import { BACKEND_URL } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 interface NavbarProps {
   user: any;
@@ -12,6 +13,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { lang, setLang, t } = useLanguage();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -21,6 +23,10 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
         ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20'
         : 'text-gray-300 hover:text-white hover:bg-white/5 border border-transparent'
     }`;
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLang(e.target.value as any);
+  };
 
   return (
     <nav className="sticky top-0 z-40 w-full border-b border-white/5 bg-[#030712]/75 backdrop-blur-md">
@@ -38,27 +44,27 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           <div className="hidden md:flex items-center gap-2">
             <Link to="/" className={linkClass('/')}>
               <Home className="h-4 w-4" />
-              <span>Home</span>
+              <span>{t('nav.home')}</span>
             </Link>
             <Link to="/upload" className={linkClass('/upload')}>
               <Upload className="h-4 w-4" />
-              <span>Diagnose</span>
+              <span>{t('nav.diagnose')}</span>
             </Link>
             <Link to="/risk" className={linkClass('/risk')}>
               <ShieldAlert className="h-4 w-4" />
-              <span>Risk Forecast</span>
+              <span>{t('nav.risk')}</span>
             </Link>
             <Link to="/encyclopedia" className={linkClass('/encyclopedia')}>
               <BookOpen className="h-4 w-4" />
-              <span>Encyclopedia</span>
+              <span>{t('nav.encyclopedia')}</span>
             </Link>
             <Link to="/about" className={linkClass('/about')}>
               <Compass className="h-4 w-4" />
-              <span>About</span>
+              <span>{t('nav.about')}</span>
             </Link>
             <Link to="/dashboard" className={linkClass('/dashboard')}>
               <LayoutDashboard className="h-4 w-4" />
-              <span>Dashboard</span>
+              <span>{t('nav.dashboard')}</span>
             </Link>
             {user && (
               <Link to="/profile" className={linkClass('/profile')}>
@@ -74,8 +80,20 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             )}
           </div>
 
-          {/* Authentication & Profile Dropdown */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Authentication & Profile Dropdown + Language Selector */}
+          <div className="hidden md:flex items-center gap-4">
+            {/* Global Language Selector Dropdown */}
+            <select
+              value={lang}
+              onChange={handleLanguageChange}
+              className="bg-slate-900/80 hover:bg-slate-800 text-emerald-300 border border-emerald-500/25 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-emerald-400 cursor-pointer transition-colors"
+            >
+              <option value="en">EN 🇬🇧</option>
+              <option value="ta">TA 🇮🇳</option>
+              <option value="hi">HI 🇮🇳</option>
+              <option value="es">ES 🇪🇸</option>
+            </select>
+
             {user ? (
               <div className="flex items-center gap-3">
                 <Link to="/profile" className="flex items-center gap-2 group">
@@ -104,20 +122,30 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
                   to="/login"
                   className="px-4 py-1.5 text-sm font-medium text-gray-300 hover:text-white transition-colors"
                 >
-                  Login
+                  {t('nav.login')}
                 </Link>
                 <Link
                   to="/register"
                   className="px-4 py-1.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg border border-emerald-500/30 transition-all duration-200 shadow-glow-emerald"
                 >
-                  Get Started
+                  {t('nav.register')}
                 </Link>
               </div>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden">
+          <div className="flex md:hidden items-center gap-2">
+            <select
+              value={lang}
+              onChange={handleLanguageChange}
+              className="bg-slate-900/80 text-emerald-300 border border-emerald-500/25 rounded px-2 py-0.5 text-xs focus:outline-none focus:border-emerald-400 cursor-pointer"
+            >
+              <option value="en">EN 🇬🇧</option>
+              <option value="ta">TA 🇮🇳</option>
+              <option value="hi">HI 🇮🇳</option>
+              <option value="es">ES 🇪🇸</option>
+            </select>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 border border-transparent"
@@ -139,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             }`}
           >
             <Home className="h-5 w-5" />
-            <span>Home</span>
+            <span>{t('nav.home')}</span>
           </Link>
           <Link
             to="/upload"
@@ -149,7 +177,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             }`}
           >
             <Upload className="h-5 w-5" />
-            <span>Diagnose</span>
+            <span>{t('nav.diagnose')}</span>
           </Link>
           <Link
             to="/risk"
@@ -159,7 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             }`}
           >
             <ShieldAlert className="h-5 w-5" />
-            <span>Risk Forecast</span>
+            <span>{t('nav.risk')}</span>
           </Link>
           <Link
             to="/encyclopedia"
@@ -169,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             }`}
           >
             <BookOpen className="h-5 w-5" />
-            <span>Encyclopedia</span>
+            <span>{t('nav.encyclopedia')}</span>
           </Link>
           <Link
             to="/about"
@@ -179,7 +207,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             }`}
           >
             <Compass className="h-5 w-5" />
-            <span>About Us</span>
+            <span>{t('nav.about')}</span>
           </Link>
           <Link
             to="/dashboard"
@@ -189,7 +217,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             }`}
           >
             <LayoutDashboard className="h-5 w-5" />
-            <span>Dashboard</span>
+            <span>{t('nav.dashboard')}</span>
           </Link>
           {user && (
             <Link
@@ -249,14 +277,14 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex justify-center items-center px-4 py-2.5 text-base font-medium text-gray-300 bg-white/5 rounded-lg border border-white/5"
               >
-                Login
+                {t('nav.login')}
               </Link>
               <Link
                 to="/register"
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex justify-center items-center px-4 py-2.5 text-base font-medium text-white bg-emerald-600 rounded-lg border border-emerald-500/30"
               >
-                Register
+                {t('nav.register')}
               </Link>
             </div>
           )}

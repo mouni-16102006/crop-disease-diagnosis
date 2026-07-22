@@ -1368,8 +1368,22 @@ def chatbot():
     lang = data.get('lang', 'en').strip().lower()
     history = data.get('history', []) # list of message dicts: [{"sender": "user"|"bot", "text": "..."}]
     
+    # 🌿 Detailed system rules and description for Mouni
+    mouni_greeting = (
+        "🌿 Hello! I'm Mouni, your AI Agriculture Assistant. I can help you with crop diseases, plant health, "
+        "fertilizers, soil management, irrigation, pest control, farming techniques, and your crop disease diagnosis results. "
+        "How can I help you today?"
+    )
+    
+    non_agri_warnings = {
+        'en': "I'm Mouni, your Crop Assistant. I specialize in crop disease diagnosis and agriculture-related topics. Please ask me something related to farming or plant health. 🌿",
+        'ta': "நான் மௌனி, உங்கள் பயிர் உதவியாளர். பயிர் நோய் கண்டறிதல் மற்றும் விவசாயம் சார்ந்த தலைப்புகளில் நான் நிபுணத்துவம் பெற்றுள்ளேன். தயவுசெய்து விவசாயம் அல்லது தாவர ஆரோக்கியம் தொடர்பான எதையாவது கேளுங்கள். 🌿",
+        'hi': "मैं मौनी हूँ, आपकी फसल सहायक। मैं फसल रोग निदान और कृषि से संबंधित विषयों में विशेषज्ञता रखती हूँ। कृपया मुझसे खेती या पौधों के स्वास्थ्य से संबंधित कुछ पूछें। 🌿",
+        'es': "Soy Mouni, tu asistente de cultivos. Me especializo en el diagnóstico de enfermedades de cultivos y temas relacionados con la agricultura. Por favor, pregúntame algo relacionado con la agricultura o la salud de las plantas. 🌿"
+    }
+
     if not message:
-        return jsonify({"answer": "🌿 Please ask a farming question so I can assist you!"}), 200
+        return jsonify({"answer": mouni_greeting}), 200
 
     # Agricultural keywords detection to prevent general out-of-bounds chat
     agri_keywords = [
@@ -1380,22 +1394,19 @@ def chatbot():
         'plant', 'leaf', 'stem', 'root', 'fruit', 'insecticide', 'fungicide', 'herbicide', 'weed', 
         'temp', 'weather', 'humidity', 'rainfall', 'seed', 'viva', 'mounisha', 'spray', 'safe', 'bees', 
         'danger', 'severity', 'remedy', 'treatment', 'organic', 'untreated', 'hello', 'hi', 'hey', 'help',
-        'mouni', 'cnn', 'algorithm', 'upload', 'dataset'
+        'mouni', 'cnn', 'algorithm', 'upload', 'dataset', 'sugarcane', 'chilli', 'brinjal', 'onion', 'groundnut',
+        'coconut', 'millets', 'pulses', 'oilseeds', 'deficiencies', 'compost', 'vermicompost', 'greenhouse',
+        'hydroponics', 'rotation', 'intercropping', 'harvesting', 'storage'
     ]
     
     msg_lower = message.lower()
     is_agri = any(kw in msg_lower for kw in agri_keywords)
-    
-    # Pre-translate non-agri warnings
-    non_agri_warnings = {
-        'en': "I'm Mouni, your Crop Assistant. I specialize in crop disease diagnosis and agriculture-related topics. Please ask me something related to farming or plant health. 🌿",
-        'ta': "நான் மௌனி, உங்கள் பயிர் உதவியாளர். பயிர் நோய் கண்டறிதல் மற்றும் விவசாயம் சார்ந்த தலைப்புகளில் நான் நிபுணத்துவம் பெற்றுள்ளேன். தயவுசெய்து விவசாயம் அல்லது தாவர ஆரோக்கியம் தொடர்பான எதையாவது கேளுங்கள். 🌿",
-        'hi': "मैं मौनी हूँ, आपकी फसल सहायक। मैं फसल रोग निदान और कृषि से संबंधित विषयों में विशेषज्ञता रखती हूँ। कृपया मुझसे खेती या पौधों के स्वास्थ्य से संबंधित कुछ पूछें। 🌿",
-        'es': "Soy Mouni, tu asistente de cultivos. Me especializo en el diagnóstico de enfermedades de cultivos y temas relacionados con la agricultura. Por favor, pregúntame algo relacionado con la agricultura o la salud de las plantas. 🌿"
-    }
-    
     if not is_agri:
         return jsonify({"answer": non_agri_warnings.get(lang, non_agri_warnings['en'])}), 200
+
+    # Simple greeting responses
+    if msg_lower in ['hello', 'hi', 'hey', 'help', 'mouni', 'who are you']:
+        return jsonify({"answer": mouni_greeting}), 200
 
     # 1. Try Google Gemini API if key is present in environment variables
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
@@ -1406,11 +1417,21 @@ def chatbot():
             
             # System instructions instructing the LLM to act as Mouni 🌿
             system_prompt = (
-                "You are Mouni, a friendly, cute agricultural AI assistant. You appear as a cute green leaf 🌿 with expressive eyes 👀 and a smiling mouth 😊. "
-                "You are helping Mounisha P (Register No: 922524243113) with her college project at VSB Engineering College. "
-                "You must strictly answer agricultural questions related to crop diseases, plant health, CNN algorithm diagnosis, fertilizers, pesticides, and organic farming. "
-                "If the user query is unrelated to agriculture, you must politely guide them back. "
-                f"You MUST respond in this language: {lang} (ta = Tamil, hi = Hindi, es = Spanish, en = English). Keep your tone encouraging and helpful."
+                "You are Mouni, a friendly, professional, patient, and supportive AI Agriculture Assistant for the project "
+                "'Automated Crop Disease Diagnosis Using CNN Algorithm.' You appear as a cute green leaf 🌿 with expressive eyes 👀 "
+                "and a smiling mouth 😊. You are helping Mounisha P (Register No: 922524243113) with her project at VSB Engineering College.\n\n"
+                "Your expertise includes:\n"
+                "1. Crop Diseases (Tomato, Potato, Apple, Corn, Grape, Rice, Cotton, Banana, Mango, Bell Pepper, Sugarcane, Chilli, Brinjal, Onion, Groundnut, Coconut, Millets, Pulses, Oilseeds).\n"
+                "2. Plant Health (wilting, yellowing, leaf spots, root/stem rot).\n"
+                "3. Fertilizers & Soil Science (NPK ratios, pH, compost, nutrient deficiencies).\n"
+                "4. Irrigation & Pest Management (drip/sprinkler, IPM, organic/chemical controls).\n"
+                "5. Farming Techniques (Precision ag, smart farming, hydroponics, crop rotation).\n"
+                "6. CNN Disease Detection explanation (how neural networks scan leaf features to classify pathologies).\n\n"
+                "Response Rules:\n"
+                "- Always answer ONLY agriculture-related questions. If asked about unrelated things, politely decline.\n"
+                "- Keep responses concise (100–250 words unless detail is requested).\n"
+                "- Encourage sustainable and organic farming practices whenever possible.\n"
+                f"- You MUST respond in this language: {lang} (ta = Tamil, hi = Hindi, es = Spanish, en = English)."
             )
             
             model = genai.GenerativeModel(
@@ -1434,12 +1455,25 @@ def chatbot():
             print(f"Gemini API Error, falling back to local database engine: {e}")
 
     # 2. Local Fallback Database Engine (when Gemini is offline or key is missing)
-    # Multilingual system greetings & fallbacks
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Check if there is active prediction context first
+    user = get_current_user()
+    if user:
+        cursor.execute("SELECT crop, disease, confidence, severity FROM Predictions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1", (user['user_id'],))
+    else:
+        cursor.execute("SELECT crop, disease, confidence, severity FROM Predictions ORDER BY created_at DESC LIMIT 1")
+    
+    last_pred = cursor.fetchone()
+    ctx_crop = last_pred['crop'] if last_pred else None
+    ctx_disease = last_pred['disease'] if last_pred else None
+    ctx_severity = last_pred['severity'] if last_pred else "Moderate"
+
+    # Multilingual lookup definitions
     translations = {
         'en': {
-            'greeting': "Hello! I am Mouni, your AI Crop Assistant. I can help you identify crop diseases, explain symptoms, provide prevention methods, recommend treatments, and answer agriculture-related questions! 🌿",
-            'only_agri': non_agri_warnings['en'],
-            'unsure': "I am unsure about this specific agricultural practice. Please refer to your local farm extension agency or academic database.",
+            'unsure': "I don't have enough information to answer that accurately. Please refer to your local farm extension agency or academic database.",
             'healthy_desc': "The latest diagnosis shows your {crop} leaf is completely healthy! There is no pathogen threat. Keep following normal watering schedules.",
             'disease_threat': "Yes, {disease} on your {crop} crop is classified as a {severity} threat. If left untreated, it will defoliate the crop canopy, block photosynthesis, and can cause up to an 80% reduction in final yield.",
             'organic_ans': "For {disease} on {crop}, the recommended organic/biological treatment is: {treatment}",
@@ -1450,9 +1484,7 @@ def chatbot():
             'prevent_ans': "To prevent the spread of {disease} in the future: {treatment} Check leaf surfaces weekly."
         },
         'ta': {
-            'greeting': "வணக்கம்! நான் மௌனி, உங்கள் பயிர்நோய் AI விவசாய உதவியாளர். பயிர் நோய்கள், பூச்சி கட்டுப்பாடு, உரங்கள், மண் வளம் அல்லது இயற்கை விவசாயம் பற்றி என்னிடம் கேளுங்கள்! 🌿",
-            'only_agri': non_agri_warnings['ta'],
-            'unsure': "இந்த குறிப்பிட்ட விவசாய முறையைப் பற்றி எனக்குத் தெரியவில்லை. உங்கள் உள்ளூர் விவசாய விரிவாக்க முகமை அல்லது கல்வி தரவுத்தளத்தைப் பார்க்கவும்.",
+            'unsure': "எனக்கு இதைப் பற்றிய போதுமான தகவல் இல்லை. உங்கள் உள்ளூர் விவசாய விரிவாக்க முகமை அல்லது கல்வி தரவுத்தளத்தைப் பார்க்கவும்.",
             'healthy_desc': "சமீபத்திய நோயறிதல் உங்கள் {crop} இலை முற்றிலும் ஆரோக்கியமாக இருப்பதைக் காட்டுகிறது! நோய்க்கிருமி அச்சுறுத்தல் எதுவும் இல்லை. சாதாரண நீர்ப்பாசன அட்டவணைகளைப் பின்பற்றுங்கள்.",
             'disease_threat': "ஆம், உங்கள் {crop} பயிரில் உள்ள {disease} நோய் {severity} அச்சுறுத்தலாக வகைப்படுத்தப்பட்டுள்ளது. இதற்கு சிகிச்சை அளிக்கப்படாவிட்டால், அது பயிர் விதானத்தை உதிர்த்து, ஒளிச்சேர்க்கையைத் தடுத்து, இறுதி மகசூலில் 80% வரை இழப்பை ஏற்படுத்தும்.",
             'organic_ans': "{crop} பயிரில் உள்ள {disease} நோய்க்கு பரிந்துரைக்கப்படும் கரிம/உயிரியல் சிகிச்சை: {treatment}",
@@ -1463,9 +1495,7 @@ def chatbot():
             'prevent_ans': "எதிர்காலத்தில் {disease} பரவுவதைத் தடுக்க: {treatment} வாரந்தோறும் இலை மேற்பரப்பைச் சரிபார்க்கவும்."
         },
         'hi': {
-            'greeting': "नमस्ते! मैं मौनी हूँ, आपकी फसल सहायक। मैं फसल के रोगों, कीट नियंत्रण, उर्वरकों, मिट्टी के स्वास्थ्य या जैविक खेती के बारे में जानकारी दे सकती हूँ! 🌿",
-            'only_agri': non_agri_warnings['hi'],
-            'unsure': "मैं इस विशिष्ट कृषि पद्धति के बारे में अनिश्चित हूं। कृपया अपने स्थानीय कृषि विस्तार एजेंसी या शैक्षणिक डेटाबेस से संपर्क करें।",
+            'unsure': "मेरे पास इसका सटीक उत्तर देने के लिए पर्याप्त जानकारी नहीं है। कृपया अपने स्थानीय कृषि विस्तार एजेंसी से संपर्क करें।",
             'healthy_desc': "नवीनतम निदान से पता चलता है कि आपकी {crop} पत्ती पूरी तरह से स्वस्थ है! कोई रोगजनक खतरा नहीं है। सामान्य सिंचाई का पालन करें।",
             'disease_threat': "हाँ, आपकी {crop} फसल पर {disease} को {severity} खतरे के रूप में वर्गीकृत किया गया है। यदि इसका उपचार नहीं किया गया, तो यह अंतिम उपज में 80% तक की कमी ला सकता है।",
             'organic_ans': "{crop} पर {disease} के लिए अनुशंसित जैविक/जैविक उपचार है: {treatment}",
@@ -1476,9 +1506,7 @@ def chatbot():
             'prevent_ans': "भविष्य में {disease} के प्रसार को रोकने के लिए: {treatment} साप्ताहिक रूप से पत्तियों की जाँच करें।"
         },
         'es': {
-            'greeting': "¡Hola! Soy Mouni, tu asistente de cultivos AI. ¡Pregúntame cualquier cosa sobre enfermedades de cultivos, control de plagas, fertilizantes o agricultura orgánica! 🌿",
-            'only_agri': non_agri_warnings['es'],
-            'unsure': "No estoy seguro de esta práctica agrícola específica. Consulte a su agencia de extensión agrícola local o base de datos académica.",
+            'unsure': "No tengo suficiente información para responder a eso con precisión. Consulte a su agencia de extensión agrícola local.",
             'healthy_desc': "¡El último diagnóstico muestra que su hoja de {crop} está completamente sana! No hay amenaza de patógenos. Siga los programas normales de riego.",
             'disease_threat': "Sí, la enfermedad {disease} en su cultivo de {crop} está clasificada como una amenaza {severity}. Si no se trata, puede causar hasta un 80% de reducción en el rendimiento final.",
             'organic_ans': "Para {disease} en {crop}, el tratamiento orgánico/biológico recomendado es: {treatment}",
@@ -1491,24 +1519,6 @@ def chatbot():
     }
     
     t = translations.get(lang, translations['en'])
-    
-    if msg_lower in ['hello', 'hi', 'hey', 'help', 'mouni']:
-        return jsonify({"answer": t['greeting']}), 200
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Search SQLite Database predictions context
-    user = get_current_user()
-    if user:
-        cursor.execute("SELECT crop, disease, confidence, severity FROM Predictions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1", (user['user_id'],))
-    else:
-        cursor.execute("SELECT crop, disease, confidence, severity FROM Predictions ORDER BY created_at DESC LIMIT 1")
-    
-    last_pred = cursor.fetchone()
-    ctx_crop = last_pred['crop'] if last_pred else None
-    ctx_disease = last_pred['disease'] if last_pred else None
-    ctx_severity = last_pred['severity'] if last_pred else "Moderate"
 
     if ctx_crop and ctx_disease and any(fw in msg_lower for fw in ['this disease', 'dangerous', 'spray', 'organic', 'chemical', 'remedy', 'treatment', 'bees', 'untreated', 'harvest', 'fertilizer', 'prevent', 'monitoring']):
         cursor.execute("SELECT * FROM DiseaseInformation WHERE crop = ? AND disease = ?", (ctx_crop, ctx_disease))
@@ -1542,48 +1552,53 @@ def chatbot():
             prev = disease_info['prevention'] if disease_info else "Prune lower leaf branches to maximize wind aeration."
             return jsonify({"answer": t['prevent_ans'].format(disease=ctx_disease, treatment=prev)}), 200
 
-    # Search specific crop & disease combinations in DiseaseInformation
+    # Smart Keyword Overlap Matching (BM25-like search engine with crop locking weight)
     cursor.execute("SELECT * FROM DiseaseInformation")
     all_diseases = cursor.fetchall()
     
+    best_row = None
+    max_overlap = 0.0
+    
+    query_words = set(msg_lower.replace('?', '').replace('.', '').replace(',', '').split())
+    stop_words = {'what', 'is', 'the', 'treatment', 'for', 'how', 'to', 'prevent', 'cure', 'organic', 'chemical', 'remedy', 'disease', 'diseased', 'healthy', 'crop', 'plant', 'leaf'}
+    meaningful_query_words = query_words - stop_words
+    
     for row in all_diseases:
         crop_n = row['crop'].lower()
-        disease_n = row['disease'].lower()
-        if crop_n in msg_lower and (disease_n in msg_lower or any(term in msg_lower for term in disease_n.split())):
-            conn.close()
-            desc = row['description']
-            org = row['organic_treatment']
-            chem = row['chemical_treatment']
-            prev = row['prevention']
+        disease_n = row['disease'].lower().replace('(diseased)', '').replace('healthy', '').strip()
+        
+        row_words = set(crop_n.split() + disease_n.split())
+        overlap = len(row_words.intersection(meaningful_query_words))
+        
+        # Give higher weight if the crop name is explicitly requested
+        if crop_n in msg_lower:
+            overlap += 1.5
             
-            if lang == 'ta':
-                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **விளக்கம்:** {desc}\n\n🍂 **இயற்கை சிகிச்சை:** {org}\n\n🧪 **வேதியியல் சிகிச்சை:** {chem}\n\n🛡️ **தடுப்பு முறைகள்:** {prev}"}), 200
-            elif lang == 'hi':
-                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **विवरण:** {desc}\n\n🍂 **जैविक उपचार:** {org}\n\n🧪 **रासायनिक उपचार:** {chem}\n\n🛡️ **रोकथाम:** {prev}"}), 200
-            elif lang == 'es':
-                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **Descripción:** {desc}\n\n🍂 **Tratamiento Orgánico:** {org}\n\n🧪 **Tratamiento Químico:** {chem}\n\n🛡️ **Prevención:** {prev}"}), 200
-            else:
-                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **Description:** {desc}\n\n🍂 **Organic Treatment:** {org}\n\n🧪 **Chemical Treatment:** {chem}\n\n🛡️ **Prevention:** {prev}"}), 200
-
-        if disease_n in msg_lower and len(disease_n) > 4:
-            conn.close()
-            desc = row['description']
-            org = row['organic_treatment']
-            chem = row['chemical_treatment']
-            prev = row['prevention']
-            if lang == 'ta':
-                return jsonify({"answer": f"**{row['disease']}** ({row['crop']} பயிர்):\n\n📝 **விளக்கம்:** {desc}\n\n🍂 **இயற்கை சிகிச்சை:** {org}\n\n🧪 **வேதியியல் சிகிச்சை:** {chem}\n\n🛡️ **தடுப்பு முறைகள்:** {prev}"}), 200
-            elif lang == 'hi':
-                return jsonify({"answer": f"**{row['disease']}** ({row['crop']} फसल):\n\n📝 **विवरण:** {desc}\n\n🍂 **जैविक उपचार:** {org}\n\n🧪 **रासायनिक उपचार:** {chem}\n\n🛡️ **रोकथाम:** {prev}"}), 200
-            elif lang == 'es':
-                return jsonify({"answer": f"**{row['disease']}** (en cultivo de {row['crop']}):\n\n📝 **Descripción:** {desc}\n\n🍂 **Tratamiento Orgánico:** {org}\n\n🧪 **Tratamiento Químico:** {chem}\n\n🛡️ **Prevención:** {prev}"}), 200
-            else:
-                return jsonify({"answer": f"For **{row['disease']}** affecting **{row['crop']}**:\n\n📝 **Description:** {desc}\n\n🍂 **Organic Treatment:** {org}\n\n🧪 **Chemical Treatment:** {chem}\n\n🛡️ **Prevention:** {prev}"}), 200
+        if overlap > max_overlap:
+            max_overlap = overlap
+            best_row = row
+            
+    if best_row and max_overlap >= 1.0:
+        row = best_row
+        conn.close()
+        desc = row['description']
+        org = row['organic_treatment']
+        chem = row['chemical_treatment']
+        prev = row['prevention']
+        
+        if lang == 'ta':
+            return jsonify({"answer": f"🌿 **{row['crop']} - {row['disease']}**\n\n📝 **விளக்கம்:** {desc}\n\n🍂 **இயற்கை சிகிச்சை:** {org}\n\n🧪 **வேதியியல் சிகிச்சை:** {chem}\n\n🛡️ **தடுப்பு முறைகள்:** {prev}"}), 200
+        elif lang == 'hi':
+            return jsonify({"answer": f"🌿 **{row['crop']} - {row['disease']}**\n\n📝 **विवरण:** {desc}\n\n🍂 **जैविक उपचार:** {org}\n\n🧪 **रासायनिक उपचार:** {chem}\n\n🛡️ **रोकथाम:** {prev}"}), 200
+        elif lang == 'es':
+            return jsonify({"answer": f"🌿 **{row['crop']} - {row['disease']}**\n\n📝 **Descripción:** {desc}\n\n🍂 **Tratamiento Orgánico:** {org}\n\n🧪 **Tratamiento Químico:** {chem}\n\n🛡️ **Prevención:** {prev}"}), 200
+        else:
+            return jsonify({"answer": f"🌿 **{row['crop']} - {row['disease']}**\n\n📝 **Description:** {desc}\n\n🍂 **Organic Treatment:** {org}\n\n🧪 **Chemical Treatment:** {chem}\n\n🛡️ **Prevention:** {prev}"}), 200
 
     conn.close()
 
-    # Match query to static knowledge base keys
-    kb = {
+    # General static agricultural knowledge base lookup
+    knowledge_base = {
         "en": {
             "tomato": "Tomato crops are susceptible to Early Blight and Late Blight. Treat Early Blight organically with copper sprays or baking soda. Keep foliage dry to prevent spore germination.",
             "potato": "Potato Late Blight is a destructive water-mold disease. Use certified disease-free seed tubers, rotate crops annually, and apply copper fungicides if conditions are wet.",
@@ -1616,7 +1631,7 @@ def chatbot():
             "mango": "மாம்பழ அந்த்ராக்னோஸ் இலைகள் மற்றும் பழங்களில் கருப்பு புண்களை ஏற்படுத்துகிறது. பூக்கும் முன் செம்பு பூஞ்சைக் கொல்லிகளை தெளிக்கவும்.",
             "pepper": "மிளகாய் பாக்டீரியா புள்ளி நோய் கரும் புள்ளிகளை ஏற்படுத்துகிறது. செம்பு அடிப்படையிலான பாக்டீரியா கொல்லிகளை தெளிக்கவும்.",
             "pesticide": "இயற்கை பூச்சிக் கட்டுப்பாட்டிற்கு, வேப்ப எண்ணெய் அல்லது சோப்பு தெளிப்புகளைப் பயன்படுத்தவும். வேதியியல் கட்டுப்பாட்டிற்கு இமிடாக்குளோபிரிடை பயன்படுத்தவும்.",
-            "fertilizer": "நைட்ரஜன் (N) இலை வளர்ச்சிக்கு உதவுகிறது. பாஸ்பரஸ் (P) வேர் வளர்ச்சிக்கும் பூப்பதற்கும் உதவுகிறது. பொட்டாசியம் (K) செல்களை வலுவாக்குகிறது.",
+            "fertilizer": "நایتரஜன் (N) இலை வளர்ச்சிக்கு உதவுகிறது. பாஸ்பரஸ் (P) வேர் வளர்ச்சிக்கும் பூப்பதற்கும் உதவுகிறது. பொட்டாசியம் (K) செல்களை வலுவாக்குகிறது.",
             "npk": "NPK என்பது நைட்ரஜன், பாஸ்பரஸ் மற்றும் பொட்டாசியம் ஆகும். 10-10-10 என்பது சம பங்குகளை குறிக்கிறது.",
             "soil": "உங்கள் மண் வடிகால் வசதி மற்றும் கரிம பொருட்கள் நிறைந்ததாக இருப்பதை உறுதி செய்யவும். மண்ணின் pH 6.0 முதல் 6.8 வரை உகந்தது.",
             "government": "PM-KISAN போன்ற அரசு திட்டங்கள் விவசாயிகளுக்கு வருடத்திற்கு ரூ. 6,000 நிதியுதவி வழங்குகின்றன. PMFBY பயிர் காப்பீட்டை வழங்குகிறது.",
@@ -1626,7 +1641,7 @@ def chatbot():
         },
         "hi": {
             "tomato": "टमाटर की फसलें अगेती झुलसा और पछेती झुलसा के प्रति संवेदनशील होती हैं। तांबे के स्प्रे से जैविक उपचार करें।",
-            "potato": "आलू का पछेती झुलसा एक विनाशकारी रोग है। प्रमाणित रोग मुक्त कंदों का उपयोग करें और फसल चक्र अपनाएं।",
+            "potato": "आलू का पछेती झुलसा एक विनाशकारी रोग है। प्रमाणित रोग मुक्त कंदों का उपयोग करें और फसल चक्र आज़माएं।",
             "apple": "सेब का पपड़ी रोग वेंटुरिया इनेक्वलिस के कारण होता है। शरद ऋतु में पत्तियों को इकट्ठा करके जला दें।",
             "corn": "मक्का का सामान्य रतुआ पत्तियों पर लाल-भूरे रंग के छाले बनाता है। प्रतिरोधी किस्में लगाएं।",
             "grape": "अंगूर का काला सड़न रोग एक कवक जनित रोग है। संक्रमित लताओं की छंटाई करें।",
@@ -1672,6 +1687,7 @@ def chatbot():
             return jsonify({"answer": val}), 200
 
     return jsonify({"answer": t['unsure']}), 200
+
 @app.route('/api/encyclopedia', methods=['GET'])
 def encyclopedia():
     conn = get_db_connection()

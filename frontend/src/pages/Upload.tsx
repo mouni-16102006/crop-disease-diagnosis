@@ -7,8 +7,11 @@ interface UploadProps {
   onPredictionResult: (result: any) => void;
 }
 
+import { useLanguage } from '../context/LanguageContext';
+
 export const Upload: React.FC<UploadProps> = ({ onPredictionResult }) => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -206,10 +209,10 @@ export const Upload: React.FC<UploadProps> = ({ onPredictionResult }) => {
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold font-display text-white mb-1.5 flex items-center justify-center gap-2">
             <Sprout className="h-6 w-6 text-emerald-400 animate-bounce" />
-            <span>Pathology Diagnostic Lab</span>
+            <span>{t('upload.title')}</span>
           </h2>
           <p className="text-xs text-gray-400 font-sans tracking-wide">
-            Upload leaf pictures or capture video frames for deep learning analysis
+            {t('upload.subtitle')}
           </p>
         </div>
 
@@ -223,7 +226,7 @@ export const Upload: React.FC<UploadProps> = ({ onPredictionResult }) => {
         {/* Crop Selector Dropdown */}
         <div className="mb-6 text-left">
           <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 font-mono">
-            Target Crop Category
+            {t('upload.crop_lock')}
           </label>
           <div className="relative">
             <select

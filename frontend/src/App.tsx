@@ -22,6 +22,7 @@ import About from './pages/About';
 
 // Components
 import Chatbot from './components/Chatbot';
+import { LanguageProvider } from './context/LanguageContext';
 
 import authService from './services/firebase';
 
@@ -75,8 +76,9 @@ export const App: React.FC = () => {
   }
 
   return (
-    <Router>
-      <div className="relative min-h-screen flex flex-col bg-[#030712] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-300">
+    <LanguageProvider>
+      <Router>
+        <div className="relative min-h-screen flex flex-col bg-[#030712] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-300">
         
         {/* Visual FX Layers */}
         <ParticleBg />
@@ -205,6 +207,7 @@ export const App: React.FC = () => {
         <Chatbot />
       </div>
     </Router>
+   </LanguageProvider>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, X, Mic, MicOff, Volume2, VolumeX, Sparkles, Trash2, Maximize2, Minimize2 } from 'lucide-react';
 import axios from 'axios';
 import { BACKEND_URL } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -79,7 +80,7 @@ export const MouniAvatar: React.FC<{ size?: number; animated?: boolean }> = ({ s
 export const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
-  const [lang, setLang] = useState<'en' | 'ta' | 'hi' | 'es'>('en');
+  const { lang, setLang } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isListening, setIsListening] = useState(false);
