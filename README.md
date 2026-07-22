@@ -2,112 +2,84 @@
   <img src="./backend/static/logo.svg" alt="CropDiag AI Logo" width="150" height="150">
 </p>
 
-# 🌱 Automated Crop Disease Diagnosis using CNN
+<h1 align="center">🌱 Automated Crop Disease Diagnosis using CNN</h1>
 
-> ** Third Year B.Tech (Artificial Intelligence & Data Science) Project**
->
-> A production-ready Full Stack AI web application that detects plant leaf diseases using Convolutional Neural Networks (CNN). The system supports multiple agricultural crops and provides instant disease prediction, confidence analysis, PDF report generation, and administrative analytics through an elegant modern web interface.
+<p align="center">
+AI-Powered Crop Disease Detection using Deep Learning (CNN)
+</p>
+
+---
+
+## 📌 Project Information
+
+- **Project Title:** Automated Crop Disease Diagnosis using CNN
+- **Student:** Mounisha P
+- **Register Number:** 922524243113
+- **Degree:** B.Tech – Artificial Intelligence and Data Science
+- **College:** VSB Engineering College, Karur
 
 ---
 
 # 🌐 Live Demo
 
-**🔗 Try it live:** [https://crop-disease-diagnosis-1-3amx.onrender.com/](https://crop-disease-diagnosis-1-3amx.onrender.com/)
-
-
+### 🔗 https://crop-disease-diagnosis-1-3amx.onrender.com/
 
 ---
 
-# 👩‍🎓 Project Information
+# 📖 Project Overview
 
-**Project Title:** Automated Crop Disease Diagnosis using CNN
+Agriculture plays a vital role in food production worldwide. Early detection of crop diseases helps reduce crop loss and improve productivity.
 
-**Student Name:** Mounisha P
+This AI-powered web application uses **Convolutional Neural Networks (CNN)** to identify diseases from crop leaf images. Users can upload an image and instantly receive:
 
-**Register Number:** 922524243113
-
-**Degree:** Bachelor of Technology (B.Tech)
-
-**Department:** Artificial Intelligence and Data Science (AI & DS)
-
-**College:** VSB Engineering College, Karur
-
----
-
-# 🌐 Live Demo & Public Deployment
-
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-brightgreen?style=for-the-badge&logo=render)](https://crop-disease-diagnosis-1-3amx.onrender.com/)
-
-- **Live Production URL:** **[https://crop-disease-diagnosis-1-3amx.onrender.com/](https://crop-disease-diagnosis-1-3amx.onrender.com/)**
-- **Local Application URL:** `http://127.0.0.1:8080/`
+- Disease Prediction
+- Confidence Score
+- Disease Description
+- Organic Treatment
+- Chemical Treatment
+- Prevention Tips
+- PDF Report
 
 ---
 
-# 📖 Project Overview & Problem Statement
-
-Agriculture is one of the most important sectors contributing to food production worldwide. Early identification of crop diseases helps farmers minimize crop losses and improve productivity.
-
-This project uses **Deep Learning (CNN)** to automatically identify diseases from uploaded crop leaf images. The application provides a fast, user-friendly interface with real-time predictions and comprehensive disease reports.
-
-The system has been designed for:
-
-- Final Year Engineering Projects
-- Academic Demonstrations
-- IEEE Research Publications
-- Hackathons
-- Production Deployment
-
----
-
-# ✨ Key Features
+# ✨ Features
 
 ## 🌿 AI Disease Detection
 
 - Upload crop leaf images
-- Automatic disease prediction
-- CNN-based image classification
-- Prediction confidence score
-- Healthy/Diseased classification
-
----
+- CNN-based disease prediction
+- Healthy/Diseased detection
+- Confidence percentage
+- Instant results
 
 ## 📊 Dashboard
 
-- Total predictions
-- Disease statistics
-- Crop-wise analytics
-- Interactive charts
-- Prediction history
+- Total Predictions
+- Disease Statistics
+- Crop Analytics
+- Charts
+- Prediction History
 
----
+## 👤 User Module
 
-## 👤 User Management
-
-- User Registration
-- Secure Login
+- Registration
+- Login
 - User Profile
 - Prediction History
-- Authentication System
 
----
+## 📄 PDF Reports
 
-## 📄 Report Generation
-
-- Automatic PDF Report
-- QR Code Integration
-- Disease Information
+- Disease Report
+- QR Code
+- Download Report
 - Prediction Summary
-- Downloadable Reports
 
----
-
-## 🔐 Security Features
+## 🔐 Security
 
 - SQL Injection Protection
-- XSS Input Filtering
+- XSS Protection
 - Rate Limiting
-- Secure Session Handling
-- Parameterized SQL Queries
+- Secure Authentication
 
 ---
 
@@ -119,36 +91,27 @@ The system has been designed for:
 - TypeScript
 - Tailwind CSS
 - Framer Motion
-- Recharts
 - Axios
-- Lucide React Icons
-
----
+- Recharts
 
 ## Backend
 
 - Python
 - Flask
 - Flask-CORS
-- SQLite Database
+- SQLite
 - ReportLab
-- Pandas
-- OpenPyXL
 
----
-
-## Artificial Intelligence
+## AI & Machine Learning
 
 - TensorFlow
-- Keras CNN
+- Keras
+- CNN
 - Scikit-Learn
-- Multi Layer Perceptron (Fallback Model)
 
 ---
 
 # 🌾 Supported Crops
-
-The application currently supports disease diagnosis for:
 
 - Tomato
 - Potato
@@ -165,134 +128,61 @@ The application currently supports disease diagnosis for:
 
 # 📁 Project Structure
 
-```
+```text
 crop-disease-diagnosis/
 │
 ├── backend/
 │   ├── app.py
-│   ├── database.db
-│   ├── init_db.py
 │   ├── train_model.py
-│   ├── disease_model.h5
+│   ├── init_db.py
 │   ├── requirements.txt
-│   │
+│   ├── disease_model.h5
 │   └── static/
-│       ├── uploads/
-│       └── metrics/
 │
-└── frontend/
-    ├── index.html
-    ├── package.json
-    ├── tailwind.config.js
-    ├── postcss.config.js
-    │
-    └── src/
-        ├── App.tsx
-        ├── main.tsx
-        ├── index.css
-        ├── assets/
-        ├── components/
-        ├── services/
-        └── pages/
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── index.html
+│
+└── README.md
 ```
 
 ---
 
-# ⚙ Installation Guide
+# ⚙ Installation
 
-## Step 1
-
-Clone the repository
+## Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/mouni-16102006/crop-disease-diagnosis.git
 ```
 
----
+## Enter Project
 
-## Step 2
+```bash
+cd crop-disease-diagnosis
+```
 
-Navigate to backend
+## Backend Setup
 
 ```bash
 cd backend
-```
-
----
-
-## Step 3
-
-Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
----
-
-## Step 4
-
-Initialize database
-
-```bash
 python init_db.py
-```
-
----
-
-## Step 5
-
-Train CNN Model
-
-```bash
-python train_model.py
-```
-
----
-
-## Step 6
-
-Run Flask Server
-
-```bash
 python app.py
 ```
 
----
-
-## Step 7
+## Frontend Setup
 
 Open another terminal
 
 ```bash
 cd frontend
-```
-
----
-
-## Step 8
-
-Install frontend dependencies
-
-```bash
 npm install
-```
-
----
-
-## Step 9
-
-Run React Application
-
-```bash
 npm run dev
 ```
 
----
-
-## Step 10
-
-Open your browser
+Application runs at
 
 ```
 http://127.0.0.1:8080/
@@ -302,121 +192,97 @@ http://127.0.0.1:8080/
 
 # 🗄 Database
 
-The project uses **SQLite** to store:
+SQLite stores
 
-- User Accounts
-- Prediction Results
-- Crop Information
+- Users
+- Predictions
 - Disease Details
-- Login History
-- Dashboard Statistics
+- Crop Information
+- Reports
 
 ---
 
-# 📊 AI Model
+# 🤖 AI Model
 
-Model Type:
+Model Used
 
 - Convolutional Neural Network (CNN)
 
-Framework:
+Frameworks
 
 - TensorFlow
 - Keras
 
-Fallback Model:
+Fallback
 
 - Scikit-Learn MLP Classifier
 
-The fallback model guarantees successful startup even on systems without AVX/AVX2 CPU instruction support.
+---
+
+# 🎯 Objectives
+
+- Detect crop diseases automatically
+- Improve prediction accuracy
+- Reduce manual inspection
+- Provide instant diagnosis
+- Help farmers make better decisions
 
 ---
 
-# 🔒 Security
+# 📸 Application Screenshots
 
-The application follows secure development practices including:
+## 🏠 Homepage
 
-- SQL Injection Prevention using Parameterized Queries
-- XSS Protection through Input Sanitization
-- Rate Limiting (60 Requests/Minute)
-- Secure Authentication
-- Session Management
-- Firebase Authentication Fallback
+<p align="center">
+<img src="./sc/website%20.jpeg" width="100%">
+</p>
+
+## 📤 Upload Page
+
+<p align="center">
+<img src="./sc/input.jpeg" width="100%">
+</p>
+
+## 🔍 Prediction Result
+
+<p align="center">
+<img src="./sc/output1.jpeg" width="100%">
+</p>
+
+## 💊 Treatment Suggestions
+
+<p align="center">
+<img src="./sc/reme.jpeg" width="100%">
+</p>
+
+## 📚 Crop Encyclopedia
+
+<p align="center">
+<img src="./sc/ency.jpeg" width="100%">
+</p>
+
+## ⚠ Disease Risk Predictor
+
+<p align="center">
+<img src="./sc/risk%20factor.jpeg" width="100%">
+</p>
+
+## 📈 Training Accuracy
+
+<p align="center">
+<img src="./sc/accuracy.jpeg" width="100%">
+</p>
 
 ---
 
-# 📈 Future Enhancements
+# 🚀 Future Enhancements
 
-- Mobile Application
-- Live Camera Disease Detection
-- Farmer Recommendation System
-- Cloud Deployment
-- Multi-language Support
-- Disease Severity Estimation
-- Weather-based Prediction
+- Mobile App
+- Live Camera Detection
+- Weather-Based Prediction
+- Voice Assistant
 - Fertilizer Recommendation
-- Voice Assistant Integration
-
----
-
-# 🎯 Project Objectives
-
-- Detect crop diseases automatically.
-- Improve disease diagnosis accuracy using CNN.
-- Reduce manual inspection time.
-- Provide instant prediction reports.
-- Assist farmers in early disease management.
-
----
-
-# 📸 Application Interface & Demo
-
-### 🏠 Website Homepage
-<p align="center">
-  <img src="./sc/website%20.jpeg" alt="Website Homepage" width="100%">
-</p>
-
-### 📥 Image Upload Input
-<p align="center">
-  <img src="./sc/input.jpeg" alt="Image Upload Input" width="100%">
-</p>
-
-### 🔬 AI Diagnosis Output
-<p align="center">
-  <img src="./sc/output1.jpeg" alt="AI Diagnosis Output" width="100%">
-</p>
-
-### 💊 Remedy Suggestions
-<p align="center">
-  <img src="./sc/reme.jpeg" alt="Remedy Suggestions" width="100%">
-</p>
-
-### 📖 Crop Encyclopedia
-<p align="center">
-  <img src="./sc/ency.jpeg" alt="Crop Encyclopedia" width="100%">
-</p>
-
-### ⚠️ Disease Risk Predictor
-<p align="center">
-  <img src="./sc/risk%20factor.jpeg" alt="Disease Risk Predictor" width="100%">
-</p>
-
-### 📊 Model Accuracy & Training Metrics
-<p align="center">
-  <img src="./sc/accuracy.jpeg" alt="Model Accuracy" width="100%">
-</p>
-
----
-
-# 📚 Academic Purpose
-
-This project has been developed as a Final Year Engineering Project for the degree of
-
-**Bachelor of Technology (B.Tech)**
-
-**Department of Artificial Intelligence and Data Science**
-
-**VSB Engineering College, Karur**
+- Multi-language Support
 
 ---
 
@@ -424,13 +290,11 @@ This project has been developed as a Final Year Engineering Project for the degr
 
 **Mounisha P**
 
-**Register Number:** 922524243113
+B.Tech – Artificial Intelligence and Data Science
 
-**B.Tech – Artificial Intelligence and Data Science**
+VSB Engineering College
 
-**VSB Engineering College**
-
-**Karur, Tamil Nadu**
+Karur, Tamil Nadu
 
 ---
 
