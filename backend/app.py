@@ -1364,12 +1364,14 @@ def environment_weather():
 @app.route('/api/chatbot', methods=['POST'])
 def chatbot():
     data = request.json or {}
-    message = data.get('message', '').strip().lower()
+    message = data.get('message', '').strip()
+    lang = data.get('lang', 'en').strip().lower()
+    history = data.get('history', []) # list of message dicts: [{"sender": "user"|"bot", "text": "..."}]
     
     if not message:
-        return jsonify({"answer": "Hello! How can I assist you with your crop care and farming diagnostics today?"}), 200
+        return jsonify({"answer": "🌿 Please ask a farming question so I can assist you!"}), 200
 
-    # Strict agricultural keyword validation
+    # Agricultural keywords detection to prevent general out-of-bounds chat
     agri_keywords = [
         'tomato', 'potato', 'apple', 'corn', 'grape', 'rice', 'cotton', 'banana', 'mango', 'pepper', 
         'wheat', 'symptom', 'disease', 'fungus', 'bacteria', 'mold', 'blight', 'scab', 'rust', 'pesticide', 
@@ -1377,18 +1379,127 @@ def chatbot():
         'micronutrient', 'scheme', 'harvest', 'rotation', 'yield', 'organic', 'chemical', 'crop', 
         'plant', 'leaf', 'stem', 'root', 'fruit', 'insecticide', 'fungicide', 'herbicide', 'weed', 
         'temp', 'weather', 'humidity', 'rainfall', 'seed', 'viva', 'mounisha', 'spray', 'safe', 'bees', 
-        'danger', 'severity', 'remedy', 'treatment', 'organic', 'untreated'
+        'danger', 'severity', 'remedy', 'treatment', 'organic', 'untreated', 'hello', 'hi', 'hey', 'help',
+        'mouni', 'cnn', 'algorithm', 'upload', 'dataset'
     ]
     
-    is_agri = any(kw in message for kw in agri_keywords)
+    msg_lower = message.lower()
+    is_agri = any(kw in msg_lower for kw in agri_keywords)
+    
+    # Pre-translate non-agri warnings
+    non_agri_warnings = {
+        'en': "I'm Mouni, your Crop Assistant. I specialize in crop disease diagnosis and agriculture-related topics. Please ask me something related to farming or plant health. 🌿",
+        'ta': "நான் மௌனி, உங்கள் பயிர் உதவியாளர். பயிர் நோய் கண்டறிதல் மற்றும் விவசாயம் சார்ந்த தலைப்புகளில் நான் நிபுணத்துவம் பெற்றுள்ளேன். தயவுசெய்து விவசாயம் அல்லது தாவர ஆரோக்கியம் தொடர்பான எதையாவது கேளுங்கள். 🌿",
+        'hi': "मैं मौनी हूँ, आपकी फसल सहायक। मैं फसल रोग निदान और कृषि से संबंधित विषयों में विशेषज्ञता रखती हूँ। कृपया मुझसे खेती या पौधों के स्वास्थ्य से संबंधित कुछ पूछें। 🌿",
+        'es': "Soy Mouni, tu asistente de cultivos. Me especializo en el diagnóstico de enfermedades de cultivos y temas relacionados con la agricultura. Por favor, pregúntame algo relacionado con la agricultura o la salud de las plantas. 🌿"
+    }
+    
     if not is_agri:
-        return jsonify({"answer": "I am an Agriculture AI Assistant. I only answer agriculture-related questions. Please ask me about crop diseases, organic treatments, soil health, irrigation, or farming schemes."}), 200
+        return jsonify({"answer": non_agri_warnings.get(lang, non_agri_warnings['en'])}), 200
 
-    # Connect to database to establish prediction session context
+    # 1. Try Google Gemini API if key is present in environment variables
+    api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    if api_key:
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=api_key)
+            
+            # System instructions instructing the LLM to act as Mouni 🌿
+            system_prompt = (
+                "You are Mouni, a friendly, cute agricultural AI assistant. You appear as a cute green leaf 🌿 with expressive eyes 👀 and a smiling mouth 😊. "
+                "You are helping Mounisha P (Register No: 922524243113) with her college project at VSB Engineering College. "
+                "You must strictly answer agricultural questions related to crop diseases, plant health, CNN algorithm diagnosis, fertilizers, pesticides, and organic farming. "
+                "If the user query is unrelated to agriculture, you must politely guide them back. "
+                f"You MUST respond in this language: {lang} (ta = Tamil, hi = Hindi, es = Spanish, en = English). Keep your tone encouraging and helpful."
+            )
+            
+            model = genai.GenerativeModel(
+                model_name='gemini-1.5-flash',
+                system_instruction=system_prompt
+            )
+            
+            # Convert history to Gemini format
+            contents = []
+            for h in history[:-1]: # exclude latest user prompt which is sent as message
+                role = "user" if h.get('sender') == 'user' else "model"
+                contents.append({"role": role, "parts": [h.get('text', '')]})
+            
+            contents.append({"role": "user", "parts": [message]})
+            
+            response = model.generate_content(contents)
+            if response and response.text:
+                return jsonify({"answer": response.text.strip()}), 200
+        except Exception as e:
+            # Log error and fallback to local DB engine
+            print(f"Gemini API Error, falling back to local database engine: {e}")
+
+    # 2. Local Fallback Database Engine (when Gemini is offline or key is missing)
+    # Multilingual system greetings & fallbacks
+    translations = {
+        'en': {
+            'greeting': "Hello! I am Mouni, your AI Crop Assistant. I can help you identify crop diseases, explain symptoms, provide prevention methods, recommend treatments, and answer agriculture-related questions! 🌿",
+            'only_agri': non_agri_warnings['en'],
+            'unsure': "I am unsure about this specific agricultural practice. Please refer to your local farm extension agency or academic database.",
+            'healthy_desc': "The latest diagnosis shows your {crop} leaf is completely healthy! There is no pathogen threat. Keep following normal watering schedules.",
+            'disease_threat': "Yes, {disease} on your {crop} crop is classified as a {severity} threat. If left untreated, it will defoliate the crop canopy, block photosynthesis, and can cause up to an 80% reduction in final yield.",
+            'organic_ans': "For {disease} on {crop}, the recommended organic/biological treatment is: {treatment}",
+            'chemical_ans': "For {disease} on {crop}, the recommended chemical treatment is: {treatment}",
+            'fertilizer_ans': "For a {crop} crop recovering from {disease}, use a balanced NPK fertilizer (e.g., 10-10-10) to support structural cell-wall regeneration. Avoid high nitrogen if it's a vegetative fungus.",
+            'harvest_ans': "If you applied chemical fungicides to treat {disease}, do not harvest your {crop} for at least 7 to 10 days to allow pesticide residues to clear. Wash crops thoroughly.",
+            'bees_ans': "The treatments for {disease} (like copper sprays) are moderately low risk to bees once dry, but you must avoid spraying when honeybees are actively foraging on flowers.",
+            'prevent_ans': "To prevent the spread of {disease} in the future: {treatment} Check leaf surfaces weekly."
+        },
+        'ta': {
+            'greeting': "வணக்கம்! நான் மௌனி, உங்கள் பயிர்நோய் AI விவசாய உதவியாளர். பயிர் நோய்கள், பூச்சி கட்டுப்பாடு, உரங்கள், மண் வளம் அல்லது இயற்கை விவசாயம் பற்றி என்னிடம் கேளுங்கள்! 🌿",
+            'only_agri': non_agri_warnings['ta'],
+            'unsure': "இந்த குறிப்பிட்ட விவசாய முறையைப் பற்றி எனக்குத் தெரியவில்லை. உங்கள் உள்ளூர் விவசாய விரிவாக்க முகமை அல்லது கல்வி தரவுத்தளத்தைப் பார்க்கவும்.",
+            'healthy_desc': "சமீபத்திய நோயறிதல் உங்கள் {crop} இலை முற்றிலும் ஆரோக்கியமாக இருப்பதைக் காட்டுகிறது! நோய்க்கிருமி அச்சுறுத்தல் எதுவும் இல்லை. சாதாரண நீர்ப்பாசன அட்டவணைகளைப் பின்பற்றுங்கள்.",
+            'disease_threat': "ஆம், உங்கள் {crop} பயிரில் உள்ள {disease} நோய் {severity} அச்சுறுத்தலாக வகைப்படுத்தப்பட்டுள்ளது. இதற்கு சிகிச்சை அளிக்கப்படாவிட்டால், அது பயிர் விதானத்தை உதிர்த்து, ஒளிச்சேர்க்கையைத் தடுத்து, இறுதி மகசூலில் 80% வரை இழப்பை ஏற்படுத்தும்.",
+            'organic_ans': "{crop} பயிரில் உள்ள {disease} நோய்க்கு பரிந்துரைக்கப்படும் கரிம/உயிரியல் சிகிச்சை: {treatment}",
+            'chemical_ans': "{crop} பயிரில் உள்ள {disease} நோய்க்கு பரிந்துரைக்கப்படும் வேதியியல் சிகிச்சை: {treatment}",
+            'fertilizer_ans': "{disease} நோயிலிருந்து மீண்டு வரும் {crop} பயிருக்கு, செல் சுவர் மீளுருவாக்கம் செய்ய சமச்சீர் NPK உரத்தைப் பயன்படுத்தவும்.",
+            'harvest_ans': "நீங்கள் வேதியியல் பூஞ்சைக் கொல்லிகளைப் பயன்படுத்தினால், பூச்சிக்கொல்லி எச்சங்கள் வெளியேற குறைந்தபட்சம் 7 முதல் 10 நாட்களுக்கு உங்கள் {crop} பயிரை அறுவடை செய்ய வேண்டாம்.",
+            'bees_ans': "{disease} நோய்க்கான சிகிச்சைகள் (செம்பு தெளிப்புகள் போன்றவை) உலர்ந்தவுடன் தேனீக்களுக்கு மிதமான குறைந்த ஆபத்தையே ஏற்படுத்துகின்றன.",
+            'prevent_ans': "எதிர்காலத்தில் {disease} பரவுவதைத் தடுக்க: {treatment} வாரந்தோறும் இலை மேற்பரப்பைச் சரிபார்க்கவும்."
+        },
+        'hi': {
+            'greeting': "नमस्ते! मैं मौनी हूँ, आपकी फसल सहायक। मैं फसल के रोगों, कीट नियंत्रण, उर्वरकों, मिट्टी के स्वास्थ्य या जैविक खेती के बारे में जानकारी दे सकती हूँ! 🌿",
+            'only_agri': non_agri_warnings['hi'],
+            'unsure': "मैं इस विशिष्ट कृषि पद्धति के बारे में अनिश्चित हूं। कृपया अपने स्थानीय कृषि विस्तार एजेंसी या शैक्षणिक डेटाबेस से संपर्क करें।",
+            'healthy_desc': "नवीनतम निदान से पता चलता है कि आपकी {crop} पत्ती पूरी तरह से स्वस्थ है! कोई रोगजनक खतरा नहीं है। सामान्य सिंचाई का पालन करें।",
+            'disease_threat': "हाँ, आपकी {crop} फसल पर {disease} को {severity} खतरे के रूप में वर्गीकृत किया गया है। यदि इसका उपचार नहीं किया गया, तो यह अंतिम उपज में 80% तक की कमी ला सकता है।",
+            'organic_ans': "{crop} पर {disease} के लिए अनुशंसित जैविक/जैविक उपचार है: {treatment}",
+            'chemical_ans': "{crop} पर {disease} के लिए अनुशंसित रासायनिक उपचार है: {treatment}",
+            'fertilizer_ans': "{disease} से उबरने वाली {crop} फसल के लिए, संतुलित एनपीके उर्वरक का उपयोग करें।",
+            'harvest_ans': "यदि आपने {disease} के इलाज के लिए रासायनिक कवकनाशी का प्रयोग किया है, तो कम से कम 7 से 10 दिनों तक अपनी {crop} फसल की कटाई न करें।",
+            'bees_ans': "{disease} के उपचार (जैसे तांबे के स्प्रे) सूखने के बाद मधुमक्खियों के लिए मध्यम कम जोखिम वाले होते हैं।",
+            'prevent_ans': "भविष्य में {disease} के प्रसार को रोकने के लिए: {treatment} साप्ताहिक रूप से पत्तियों की जाँच करें।"
+        },
+        'es': {
+            'greeting': "¡Hola! Soy Mouni, tu asistente de cultivos AI. ¡Pregúntame cualquier cosa sobre enfermedades de cultivos, control de plagas, fertilizantes o agricultura orgánica! 🌿",
+            'only_agri': non_agri_warnings['es'],
+            'unsure': "No estoy seguro de esta práctica agrícola específica. Consulte a su agencia de extensión agrícola local o base de datos académica.",
+            'healthy_desc': "¡El último diagnóstico muestra que su hoja de {crop} está completamente sana! No hay amenaza de patógenos. Siga los programas normales de riego.",
+            'disease_threat': "Sí, la enfermedad {disease} en su cultivo de {crop} está clasificada como una amenaza {severity}. Si no se trata, puede causar hasta un 80% de reducción en el rendimiento final.",
+            'organic_ans': "Para {disease} en {crop}, el tratamiento orgánico/biológico recomendado es: {treatment}",
+            'chemical_ans': "Para {disease} en {crop}, el tratamiento químico recomendado es: {treatment}",
+            'fertilizer_ans': "Para un cultivo de {crop} que se recupera de {disease}, use un fertilizante NPK equilibrado.",
+            'harvest_ans': "Si aplicó fungicidas químicos para tratar {disease}, no coseche su {crop} durante al menos 7 a 10 días para permitir que los residuos se aclaren.",
+            'bees_ans': "Los tratamientos para {disease} (como los aerosoles de cobre) son de riesgo moderadamente bajo para las abejas una vez secos.",
+            'prevent_ans': "Para prevenir la propagación de {disease} en el futuro: {treatment} Revise las hojas de su cultivo semanalmente."
+        }
+    }
+    
+    t = translations.get(lang, translations['en'])
+    
+    if msg_lower in ['hello', 'hi', 'hey', 'help', 'mouni']:
+        return jsonify({"answer": t['greeting']}), 200
+
     conn = get_db_connection()
     cursor = conn.cursor()
-    user = get_current_user()
     
+    # Search SQLite Database predictions context
+    user = get_current_user()
     if user:
         cursor.execute("SELECT crop, disease, confidence, severity FROM Predictions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1", (user['user_id'],))
     else:
@@ -1398,73 +1509,169 @@ def chatbot():
     ctx_crop = last_pred['crop'] if last_pred else None
     ctx_disease = last_pred['disease'] if last_pred else None
     ctx_severity = last_pred['severity'] if last_pred else "Moderate"
-    
-    # Check if there is a match for follow-up questions using context
-    if ctx_crop and ctx_disease and any(fw in message for fw in ['this disease', 'dangerous', 'spray', 'organic', 'chemical', 'remedy', 'treatment', 'bees', 'untreated', 'harvest', 'fertilizer', 'prevent', 'monitoring']):
-        # Fetch detailed treatment advice from database
+
+    if ctx_crop and ctx_disease and any(fw in msg_lower for fw in ['this disease', 'dangerous', 'spray', 'organic', 'chemical', 'remedy', 'treatment', 'bees', 'untreated', 'harvest', 'fertilizer', 'prevent', 'monitoring']):
         cursor.execute("SELECT * FROM DiseaseInformation WHERE crop = ? AND disease = ?", (ctx_crop, ctx_disease))
         disease_info = cursor.fetchone()
         conn.close()
         
-        if "dangerous" in message or "severity" in message or "untreated" in message:
+        if "dangerous" in msg_lower or "severity" in msg_lower or "untreated" in msg_lower:
             if "healthy" in ctx_disease.lower():
-                return jsonify({"answer": f"The latest diagnosis shows your {ctx_crop} leaf is completely healthy! There is no pathogen threat. Keep following normal watering schedules."}), 200
+                return jsonify({"answer": t['healthy_desc'].format(crop=ctx_crop)}), 200
             else:
-                return jsonify({"answer": f"Yes, {ctx_disease} on your {ctx_crop} crop is classified as a {ctx_severity} threat. If left untreated, it will defoliate the crop canopy, block photosynthesis, and can cause up to an 80% reduction in final yield."}), 200
+                return jsonify({"answer": t['disease_threat'].format(disease=ctx_disease, crop=ctx_crop, severity=ctx_severity)}), 200
                 
-        elif "organic" in message or "remedy" in message:
+        elif "organic" in msg_lower or "remedy" in msg_lower:
             treatment = disease_info['organic_treatment'] if disease_info else "Apply copper-based biological sprays or baking soda solutions."
-            return jsonify({"answer": f"For {ctx_disease} on {ctx_crop}, the recommended organic/biological treatment is: {treatment}"}), 200
+            return jsonify({"answer": t['organic_ans'].format(disease=ctx_disease, crop=ctx_crop, treatment=treatment)}), 200
             
-        elif "chemical" in message or "pesticide" in message or "fungicide" in message or "treatment" in message or "spray" in message:
+        elif "chemical" in msg_lower or "pesticide" in msg_lower or "fungicide" in msg_lower or "treatment" in msg_lower or "spray" in msg_lower:
             treatment = disease_info['chemical_treatment'] if disease_info else "Apply copper oxychloride or Mancozeb sprays under dry weather conditions."
-            return jsonify({"answer": f"For {ctx_disease} on {ctx_crop}, the recommended chemical treatment is: {treatment}"}), 200
+            return jsonify({"answer": t['chemical_ans'].format(disease=ctx_disease, crop=ctx_crop, treatment=treatment)}), 200
             
-        elif "fertilizer" in message:
-            return jsonify({"answer": f"For a {ctx_crop} crop recovering from {ctx_disease}, use a balanced NPK fertilizer (e.g., 10-10-10) to support structural cell-wall regeneration. Avoid high nitrogen if it's a vegetative fungus."}), 200
+        elif "fertilizer" in msg_lower:
+            return jsonify({"answer": t['fertilizer_ans'].format(crop=ctx_crop, disease=ctx_disease)}), 200
             
-        elif "harvest" in message:
-            return jsonify({"answer": f"If you applied chemical fungicides to treat {ctx_disease}, do not harvest your {ctx_crop} for at least 7 to 10 days to allow pesticide residues to clear. Wash crops thoroughly."}), 200
+        elif "harvest" in msg_lower:
+            return jsonify({"answer": t['harvest_ans'].format(crop=ctx_crop, disease=ctx_disease)}), 200
             
-        elif "bees" in message or "safe" in message:
-            return jsonify({"answer": f"The treatments for {ctx_disease} (like copper sprays) are moderately low risk to bees once dry, but you must avoid spraying when honeybees are actively foraging on flowers."}), 200
+        elif "bees" in msg_lower or "safe" in msg_lower:
+            return jsonify({"answer": t['bees_ans'].format(disease=ctx_disease)}), 200
             
-        elif "prevent" in message or "monitoring" in message:
-            prev = disease_info['prevention'] if disease_info else "Prune lower leaf branches to maximize wind aeration and prevent overhead drip watering."
-            return jsonify({"answer": f"To prevent the spread of {ctx_disease} in the future: {prev} Check leaf surfaces weekly."}), 200
+        elif "prevent" in msg_lower or "monitoring" in msg_lower:
+            prev = disease_info['prevention'] if disease_info else "Prune lower leaf branches to maximize wind aeration."
+            return jsonify({"answer": t['prevent_ans'].format(disease=ctx_disease, treatment=prev)}), 200
 
-    # If no active prediction context or general agri question
-    conn.close()
+    # Search specific crop & disease combinations in DiseaseInformation
+    cursor.execute("SELECT * FROM DiseaseInformation")
+    all_diseases = cursor.fetchall()
     
-    knowledge_base = {
-        "tomato": "Tomato crops are susceptible to Early Blight and Late Blight. Treat Early Blight organically with copper sprays or baking soda. Keep foliage dry to prevent spore germination.",
-        "potato": "Potato Late Blight is a destructive water-mold disease. Use certified disease-free seed tubers, rotate crops annually, and apply copper fungicides if conditions are wet.",
-        "apple": "Apple Scab is caused by Venturia inaequalis. Rake up and burn leaves in autumn to remove overwintering fungi. Apply sulfur sprays during early spring bud-breaks.",
-        "corn": "Corn Common Rust creates reddish-brown powdery pustules on leaves. It is caused by Puccinia sorghi. Plant resistant hybrids and remove crop residues after harvest.",
-        "grape": "Grape Black Rot is a fungal disease caused by Guignardia bidwellii. Remove mummified berries and prune infected canes during winter to decrease infection rates.",
-        "rice": "Rice Blast is caused by Magnaporthe oryzae, creating spindle-shaped grey spots. Plant resistant crop strains and avoid over-fertilizing with nitrogen.",
-        "cotton": "Cotton Leaf Blight is a fungal infection. Avoid overhead sprinkler irrigation, maintain crop rotations, and spray biological copper formulas if spots spread.",
-        "banana": "Banana Black Sigatoka causes dark leaf streaks and premature fruit ripening. Improve drainage, prune infected leaves, and use mineral oil or copper sprays.",
-        "mango": "Mango Anthracnose causes dark lesions on leaves and fruits. Spray copper fungicides pre-flowering and prune dead wood to reduce spore loads.",
-        "pepper": "Bell Pepper Bacterial Spot causes dark water-soaked spots. Spray copper-based bactericides and avoid handling wet plants to prevent transmission.",
-        "pesticide": "For organic control, use Neem oil or horticultural soap sprays. For chemical pesticide treatments, apply Imidacloprid for sucking pests, or Spinosad for leaf miners.",
-        "fertilizer": "Nitrogen (N) promotes leafy foliage. Phosphorus (P) accelerates root development and blooms. Potassium (K) strengthens plant cells and disease resistance.",
-        "npk": "NPK stands for Nitrogen, Phosphorus, and Potassium. A ratio like 10-10-10 signifies equal parts of each. Use high Nitrogen for leafy greens, and high Phosphorus for root/flower growth.",
-        "soil": "Ensure your soil is well-drained and rich in organic matter. A soil pH of 6.0 to 6.8 is ideal for most crops. Run regular soil testing to check NPK indexes.",
-        "government": "Government schemes like PM-KISAN provide financial support of Rs. 6,000/year to farmers. Pradhan Mantri Fasal Bima Yojana (PMFBY) offers crop insurance against natural disasters.",
-        "irrigation": "Drip irrigation is highly recommended for disease prevention because it keeps leaf canopies completely dry while delivering water straight to the plant root zone.",
-        "viva": "In your project presentation, remember: Flask hosts our OpenCV HSV preprocessing masks and Support Vector Machine (SVM) model. React provides the dark glassmorphism interface.",
-        "mounisha": "Hello Mounisha! CropDiag AI is fully updated and prepared for your university presentation, featuring your register details and custom UI templates."
+    for row in all_diseases:
+        crop_n = row['crop'].lower()
+        disease_n = row['disease'].lower()
+        if crop_n in msg_lower and (disease_n in msg_lower or any(term in msg_lower for term in disease_n.split())):
+            conn.close()
+            desc = row['description']
+            org = row['organic_treatment']
+            chem = row['chemical_treatment']
+            prev = row['prevention']
+            
+            if lang == 'ta':
+                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **விளக்கம்:** {desc}\n\n🍂 **இயற்கை சிகிச்சை:** {org}\n\n🧪 **வேதியியல் சிகிச்சை:** {chem}\n\n🛡️ **தடுப்பு முறைகள்:** {prev}"}), 200
+            elif lang == 'hi':
+                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **विवरण:** {desc}\n\n🍂 **जैविक उपचार:** {org}\n\n🧪 **रासायनिक उपचार:** {chem}\n\n🛡️ **रोकथाम:** {prev}"}), 200
+            elif lang == 'es':
+                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **Descripción:** {desc}\n\n🍂 **Tratamiento Orgánico:** {org}\n\n🧪 **Tratamiento Químico:** {chem}\n\n🛡️ **Prevención:** {prev}"}), 200
+            else:
+                return jsonify({"answer": f"**{row['crop']} - {row['disease']}**\n\n📝 **Description:** {desc}\n\n🍂 **Organic Treatment:** {org}\n\n🧪 **Chemical Treatment:** {chem}\n\n🛡️ **Prevention:** {prev}"}), 200
+
+        if disease_n in msg_lower and len(disease_n) > 4:
+            conn.close()
+            desc = row['description']
+            org = row['organic_treatment']
+            chem = row['chemical_treatment']
+            prev = row['prevention']
+            if lang == 'ta':
+                return jsonify({"answer": f"**{row['disease']}** ({row['crop']} பயிர்):\n\n📝 **விளக்கம்:** {desc}\n\n🍂 **இயற்கை சிகிச்சை:** {org}\n\n🧪 **வேதியியல் சிகிச்சை:** {chem}\n\n🛡️ **தடுப்பு முறைகள்:** {prev}"}), 200
+            elif lang == 'hi':
+                return jsonify({"answer": f"**{row['disease']}** ({row['crop']} फसल):\n\n📝 **विवरण:** {desc}\n\n🍂 **जैविक उपचार:** {org}\n\n🧪 **रासायनिक उपचार:** {chem}\n\n🛡️ **रोकथाम:** {prev}"}), 200
+            elif lang == 'es':
+                return jsonify({"answer": f"**{row['disease']}** (en cultivo de {row['crop']}):\n\n📝 **Descripción:** {desc}\n\n🍂 **Tratamiento Orgánico:** {org}\n\n🧪 **Tratamiento Químico:** {chem}\n\n🛡️ **Prevención:** {prev}"}), 200
+            else:
+                return jsonify({"answer": f"For **{row['disease']}** affecting **{row['crop']}**:\n\n📝 **Description:** {desc}\n\n🍂 **Organic Treatment:** {org}\n\n🧪 **Chemical Treatment:** {chem}\n\n🛡️ **Prevention:** {prev}"}), 200
+
+    conn.close()
+
+    # Match query to static knowledge base keys
+    kb = {
+        "en": {
+            "tomato": "Tomato crops are susceptible to Early Blight and Late Blight. Treat Early Blight organically with copper sprays or baking soda. Keep foliage dry to prevent spore germination.",
+            "potato": "Potato Late Blight is a destructive water-mold disease. Use certified disease-free seed tubers, rotate crops annually, and apply copper fungicides if conditions are wet.",
+            "apple": "Apple Scab is caused by Venturia inaequalis. Rake up and burn leaves in autumn to remove overwintering fungi. Apply sulfur sprays during early spring bud-breaks.",
+            "corn": "Corn Common Rust creates reddish-brown powdery pustules on leaves. It is caused by Puccinia sorghi. Plant resistant hybrids and remove crop residues after harvest.",
+            "grape": "Grape Black Rot is a fungal disease caused by Guignardia bidwellii. Remove mummified berries and prune infected canes during winter to decrease infection rates.",
+            "rice": "Rice Blast is caused by Magnaporthe oryzae, creating spindle-shaped grey spots. Plant resistant crop strains and avoid over-fertilizing with nitrogen.",
+            "cotton": "Cotton Leaf Blight is a fungal infection. Avoid overhead sprinkler irrigation, maintain crop rotations, and spray biological copper formulas if spots spread.",
+            "banana": "Banana Black Sigatoka causes dark leaf streaks and premature fruit ripening. Improve drainage, prune infected leaves, and use mineral oil or copper sprays.",
+            "mango": "Mango Anthracnose causes dark lesions on leaves and fruits. Spray copper fungicides pre-flowering and prune dead wood to reduce spore loads.",
+            "pepper": "Bell Pepper Bacterial Spot causes dark water-soaked spots. Spray copper-based bactericides and avoid handling wet plants to prevent transmission.",
+            "pesticide": "For organic control, use Neem oil or horticultural soap sprays. For chemical pesticide treatments, apply Imidacloprid for sucking pests, or Spinosad for leaf miners.",
+            "fertilizer": "Nitrogen (N) promotes leafy foliage. Phosphorus (P) accelerates root development and blooms. Potassium (K) strengthens plant cells and disease resistance.",
+            "npk": "NPK stands for Nitrogen, Phosphorus, and Potassium. A ratio like 10-10-10 signifies equal parts of each. Use high Nitrogen for leafy greens, and high Phosphorus for root/flower growth.",
+            "soil": "Ensure your soil is well-drained and rich in organic matter. A soil pH of 6.0 to 6.8 is ideal for most crops. Run regular soil testing to check NPK indexes.",
+            "government": "Government schemes like PM-KISAN provide financial support of Rs. 6,000/year to farmers. Pradhan Mantri Fasal Bima Yojana (PMFBY) offers crop insurance against natural disasters.",
+            "irrigation": "Drip irrigation is highly recommended for disease prevention because it keeps leaf canopies completely dry while delivering water straight to the plant root zone.",
+            "viva": "In your project presentation, remember: Flask hosts our OpenCV HSV preprocessing masks and Support Vector Machine (SVM) model. React provides the dark glassmorphism interface.",
+            "mounisha": "Hello Mounisha! CropDiag AI is fully updated and prepared for your university presentation, featuring your register details and custom UI templates."
+        },
+        "ta": {
+            "tomato": "தக்காளி பயிர்கள் ஆரம்பகால கருகல் மற்றும் தாமதமான கருகல் நோய்களால் பாதிக்கப்படக்கூடியவை. செம்பு தெளிப்புகள் கொண்டு இயற்கை முறையில் சிகிச்சையளிக்கவும்.",
+            "potato": "உருளைக்கிழங்கு கருகல் நோய் மிகவும் அழிவுகரமானது. சான்றளிக்கப்பட்ட விதை கிழங்குகளைப் பயன்படுத்தவும், பயிர் சுழற்சியைப் பின்பற்றவும்.",
+            "apple": "ஆப்பிள் சொறி நோய் வெஞ்சுரியா இனெக்குவாலிஸால் ஏற்படுகிறது. இலையுதிர் காலத்தில் இலைகளை சேகரித்து எரிக்கவும்.",
+            "corn": "சோள துரு நோய் இலைகளில் சிவப்பு-பழுப்பு நிற புள்ளிகளை உருவாக்குகிறது. எதிர்ப்புத் திறன் கொண்ட ரகங்களை நடவு செய்யவும்.",
+            "grape": "திராட்சை கருப்பு அழுகல் நோய் பூஞ்சை தொற்றால் ஏற்படுகிறது. குளிர்காலத்தில் பாதிக்கப்பட்ட தண்டுகளை கவாத்து செய்யவும்.",
+            "rice": "நெல் குலை நோய் மேக்னபோர்த் ஓரைசே என்ற பூஞ்சையால் ஏற்படுகிறது. அதிகப்படியான நைட்ரஜன் உரங்களைத் தவிர்க்கவும்.",
+            "cotton": "பருத்தி இலை கருகல் ஒரு பூஞ்சை தொற்று ஆகும். தெளிப்பு நீர் பாசனத்தை தவிர்க்கவும் மற்றும் பயிர் சுழற்சியை மேற்கொள்ளவும்.",
+            "banana": "வாழை சிகடோகா நோய் இலைகளில் கருப்பு கோடுகளை உருவாக்குகிறது. வடிகால் வசதியை மேம்படுத்தவும், கனிம எண்ணெய் தெளிக்கவும்.",
+            "mango": "மாம்பழ அந்த்ராக்னோஸ் இலைகள் மற்றும் பழங்களில் கருப்பு புண்களை ஏற்படுத்துகிறது. பூக்கும் முன் செம்பு பூஞ்சைக் கொல்லிகளை தெளிக்கவும்.",
+            "pepper": "மிளகாய் பாக்டீரியா புள்ளி நோய் கரும் புள்ளிகளை ஏற்படுத்துகிறது. செம்பு அடிப்படையிலான பாக்டீரியா கொல்லிகளை தெளிக்கவும்.",
+            "pesticide": "இயற்கை பூச்சிக் கட்டுப்பாட்டிற்கு, வேப்ப எண்ணெய் அல்லது சோப்பு தெளிப்புகளைப் பயன்படுத்தவும். வேதியியல் கட்டுப்பாட்டிற்கு இமிடாக்குளோபிரிடை பயன்படுத்தவும்.",
+            "fertilizer": "நைட்ரஜன் (N) இலை வளர்ச்சிக்கு உதவுகிறது. பாஸ்பரஸ் (P) வேர் வளர்ச்சிக்கும் பூப்பதற்கும் உதவுகிறது. பொட்டாசியம் (K) செல்களை வலுவாக்குகிறது.",
+            "npk": "NPK என்பது நைட்ரஜன், பாஸ்பரஸ் மற்றும் பொட்டாசியம் ஆகும். 10-10-10 என்பது சம பங்குகளை குறிக்கிறது.",
+            "soil": "உங்கள் மண் வடிகால் வசதி மற்றும் கரிம பொருட்கள் நிறைந்ததாக இருப்பதை உறுதி செய்யவும். மண்ணின் pH 6.0 முதல் 6.8 வரை உகந்தது.",
+            "government": "PM-KISAN போன்ற அரசு திட்டங்கள் விவசாயிகளுக்கு வருடத்திற்கு ரூ. 6,000 நிதியுதவி வழங்குகின்றன. PMFBY பயிர் காப்பீட்டை வழங்குகிறது.",
+            "irrigation": "சொட்டு நீர் பாசனம் பரிந்துரைக்கப்படுகிறது, ஏனெனில் இது இலைகளை உலர வைத்து வேர் பகுதிக்கு நேரடியாக நீர் வழங்குகிறது.",
+            "viva": "உங்கள் விளக்கக்காட்சியில் நினைவில் கொள்ளவும்: பிளாஸ்க் OpenCV HSV மாஸ்க் மற்றும் SVM மாதிரியை இயக்குகிறது. ரியாக்ட் இடைமுகத்தை வழங்குகிறது.",
+            "mounisha": "வணக்கம் மௌனிஷா! பயிர்நோய் AI உங்கள் பல்கலைக்கழக விளக்கக்காட்சிக்கு உங்களின் பதிவு விவரங்களுடன் தயாராக உள்ளது."
+        },
+        "hi": {
+            "tomato": "टमाटर की फसलें अगेती झुलसा और पछेती झुलसा के प्रति संवेदनशील होती हैं। तांबे के स्प्रे से जैविक उपचार करें।",
+            "potato": "आलू का पछेती झुलसा एक विनाशकारी रोग है। प्रमाणित रोग मुक्त कंदों का उपयोग करें और फसल चक्र अपनाएं।",
+            "apple": "सेब का पपड़ी रोग वेंटुरिया इनेक्वलिस के कारण होता है। शरद ऋतु में पत्तियों को इकट्ठा करके जला दें।",
+            "corn": "मक्का का सामान्य रतुआ पत्तियों पर लाल-भूरे रंग के छाले बनाता है। प्रतिरोधी किस्में लगाएं।",
+            "grape": "अंगूर का काला सड़न रोग एक कवक जनित रोग है। संक्रमित लताओं की छंटाई करें।",
+            "rice": "धान का झोंका रोग मैग्नापोर्थ ओरेजी के कारण होता है। नाइट्रोजन उर्वरकों के अत्यधिक उपयोग से बचें।",
+            "cotton": "कपास का पत्ती झुलसा एक कवक संक्रमण है। फव्वारा सिंचाई से बचें और जैविक तांबे के स्प्रे का उपयोग करें।",
+            "banana": "केले का सिगाटोका रोग पत्तियों पर काली धारियां बनाता है। जल निकासी में सुधार करें और खनिज तेल का छिड़काव करें।",
+            "mango": "आम का एन्थ्रेक्नोज पत्तियों और फलों पर काले धब्बे बनाता है। फूल आने से पहले तांबे के कवकनाशी का छिड़काव करें।",
+            "pepper": "शिमला मिर्च का जीवाणु जनित धब्बा रोग काले धब्बे बनाता है। तांबा आधारित जीवाणुनाशकों का छिड़काव करें।",
+            "pesticide": "जैविक नियंत्रण के लिए नीम के तेल का उपयोग करें। रासायनिक कीटनाशकों के लिए इमिडाक्लोप्रिड का उपयोग करें।",
+            "fertilizer": "नाइट्रोजन (N) पत्तियों के विकास को बढ़ावा देता है। फास्फोरस (P) जड़ों और फूलों के विकास को तेज करता है। पोटेशियम (K) कोशिकाओं को मजबूत करता है।",
+            "npk": "एनपीके का मतलब नाइट्रोजन, फास्फोरस और पोटेशियम है। 10-10-10 अनुपात बराबर भागों को दर्शाता है।",
+            "soil": "सुनिश्चित करें कि आपकी मिट्टी अच्छी जल निकासी वाली और जैविक पदार्थों से भरपूर है। 6.0 से 6.8 का पीएच आदर्श है।",
+            "government": "पीएम-किसान जैसी सरकारी योजनाएं किसानों को प्रति वर्ष 6,000 रुपये की वित्तीय सहायता प्रदान करती हैं। पीएमएफबीवाई फसल बीमा प्रदान करती है।",
+            "irrigation": "ड्रिप सिंचाई की अत्यधिक सिफारिश की जाती है क्योंकि यह पत्तियों को सूखा रखती है और पानी को सीधे जड़ों तक पहुंचाती है।",
+            "viva": "अपनी प्रस्तुति में याद रखें: फ्लास्क हमारे OpenCV और SVM मॉडल को होस्ट करता है। रिएक्ट यूजर इंटरफेस प्रदान करता है।",
+            "mounisha": "नमस्ते मौनिशा! क्रॉपडायग एआई आपकी प्रस्तुति के लिए आपके पंजीकरण विवरण के साथ पूरी तरह तैयार है।"
+        },
+        "es": {
+            "tomato": "Los cultivos de tomate son susceptibles al tizón temprano y al tizón tardío. Trate el tizón temprano con cobre u orgánicos.",
+            "potato": "El tizón tardío de la papa es una enfermedad destructiva. Use tubérculos certificados y rote los cultivos.",
+            "apple": "La sarna de la manzana es causada por Venturia inaequalis. Rastrille y queme las hojas en otoño.",
+            "corn": "La roya común del maíz crea pústulas de color marrón rojizo. Siembre híbridos resistentes.",
+            "grape": "La podredumbre negra de la uva es una enfermedad fúngica. Podar los sarmientos infectados en invierno.",
+            "rice": "El tizon del arroz crea manchas grises fusiformes. Evite fertilizar en exceso con nitrógeno.",
+            "cotton": "El tizón de la hoja de algodón es una infección fúngica. Evite el riego por aspersión y rote cultivos.",
+            "banana": "La sigatoka negra del banano causa rayas oscuras. Mejore el drenaje y use aerosoles de aceite mineral o cobre.",
+            "mango": "La antracnosis del mango causa lesiones oscuras. Rocíe fungicidas de cobre antes de la floración.",
+            "pepper": "La mancha bacteriana del pimiento causa manchas oscuras. Rocíe bactericidas a base de cobre.",
+            "pesticide": "Para control orgánico, use aceite de Neem. Para tratamiento químico, aplique Imidacloprid.",
+            "fertilizer": "El nitrógeno (N) promueve el follaje. El fósforo (P) acelera raíces y flores. El potasio (K) fortalece las células.",
+            "npk": "NPK significa Nitrógeno, Fósforo y Potasio. Una proporción de 10-10-10 significa partes iguales.",
+            "soil": "El suelo debe estar bien drenado y ser rico en materia orgánica. Un pH de 6.0 a 6.8 es ideal.",
+            "government": "Los planes como PM-KISAN brindan apoyo de Rs. 6,000/año. PMFBY ofrece seguro de cultivos.",
+            "irrigation": "Se recomienda el riego por goteo porque mantiene seco el follaje y entrega agua a las raíces.",
+            "viva": "En su presentación, recuerde: Flask aloja la máscara OpenCV HSV y el modelo SVM. React proporciona la interfaz.",
+            "mounisha": "¡Hola Mounisha! CropDiag AI está listo para su presentación con sus datos de registro."
+        }
     }
 
-    # Match query to knowledge base keys
-    for key, val in knowledge_base.items():
-        if key in message:
+    kb = knowledge_base.get(lang, knowledge_base['en'])
+    for key, val in kb.items():
+        if key in msg_lower:
             return jsonify({"answer": val}), 200
 
-    # Standard agricultural fallback when unsure
-    return jsonify({"answer": "I am unsure about this specific agricultural practice. Please refer to your local farm extension agency or academic database."}), 200
-
+    return jsonify({"answer": t['unsure']}), 200
 @app.route('/api/encyclopedia', methods=['GET'])
 def encyclopedia():
     conn = get_db_connection()
