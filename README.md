@@ -38,23 +38,7 @@ AI Powered Crop Disease Diagnosis using Deep Learning (CNN)
 
 ---
 
-<p align="center">
 
-<a href="https://crop-disease-diagnosis-1-3amx.onrender.com">
-<img src="https://img.shields.io/badge/🌐 Live Demo-success?style=for-the-badge">
-</a>
-
-<a href="https://github.com/mouni-16102006/crop-disease-diagnosis">
-<img src="https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github">
-</a>
-
-<a href="mailto:yourmail@gmail.com">
-<img src="https://img.shields.io/badge/Contact-Developer-red?style=for-the-badge">
-</a>
-
-</p>
-
----
 ---
 
 ## 📌 Project Information
