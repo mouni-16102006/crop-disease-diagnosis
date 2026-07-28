@@ -1,58 +1,93 @@
-
-# 🌱 CropDiag AI
-
 <p align="center">
-  <img src="./backend/static/logo.svg" width="150">
+  <img src="./backend/static/logo.svg" alt="CropDiag AI Logo" width="150" height="150">
 </p>
 
-<h1 align="center">Automated Crop Disease Diagnosis using CNN</h1>
-<p align="center">
-AI-Powered Crop Disease Detection using Deep Learning
-</p>
+<h1 align="center">🌱 Automated Crop Disease Diagnosis using CNN</h1>
 
 <p align="center">
-
-![Status](https://img.shields.io/badge/Status-Live-brightgreen?style=for-the-badge)
-![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-CNN-orange?style=for-the-badge&logo=tensorflow)
-
-</p>
-
-<p align="center">
-
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-success?style=for-the-badge)](https://crop-disease-diagnosis-1-3amx.onrender.com/)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/mouni-16102006/crop-disease-diagnosis)
-
+AI-Powered Crop Disease Detection using Deep Learning (CNN)
 </p>
 
 ---
 
-# 📖 About
+## 📌 Project Information
 
-CropDiag AI is an end-to-end crop disease diagnosis platform that uses Convolutional Neural Networks (CNNs) to identify diseases from crop leaf images. It provides disease prediction, confidence score, treatment suggestions, prevention tips, PDF reports and prediction history through a modern React + Flask application.
+- **Project Title:** Automated Crop Disease Diagnosis using CNN
+- **Student:** Mounisha P
+- **Register Number:** 922524243113
+- **Degree:** B.Tech – Artificial Intelligence and Data Science
+- **College:** VSB Engineering College, Karur
+
+---
+
+# 🌐 Live Demo
+
+### 🔗 https://crop-disease-diagnosis-1-3amx.onrender.com/
+
+---
+
+# 📖 Project Overview
+
+Agriculture plays a vital role in food production worldwide. Early detection of crop diseases helps reduce crop loss and improve productivity.
+
+This AI-powered web application uses **Convolutional Neural Networks (CNN)** to identify diseases from crop leaf images. Users can upload an image and instantly receive:
+
+- Disease Prediction
+- Confidence Score
+- Disease Description
+- Organic Treatment
+- Chemical Treatment
+- Prevention Tips
+- PDF Report
 
 ---
 
 # ✨ Features
 
-- 🌿 AI-powered crop disease prediction
-- 📷 Upload leaf images
-- 🤖 CNN deep learning model
-- 📊 Confidence score
-- 💊 Organic & chemical treatments
-- 📄 PDF report generation
-- 📈 Dashboard analytics
-- 👤 User authentication
-- 🌓 Responsive UI
-- 📚 Crop encyclopedia
+## 🌿 AI Disease Detection
+
+- Upload crop leaf images
+- CNN-based disease prediction
+- Healthy/Diseased detection
+- Confidence percentage
+- Instant results
+
+## 📊 Dashboard
+
+- Total Predictions
+- Disease Statistics
+- Crop Analytics
+- Charts
+- Prediction History
+
+## 👤 User Module
+
+- Registration
+- Login
+- User Profile
+- Prediction History
+
+## 📄 PDF Reports
+
+- Disease Report
+- QR Code
+- Download Report
+- Prediction Summary
+
+## 🔐 Security
+
+- SQL Injection Protection
+- XSS Protection
+- Rate Limiting
+- Secure Authentication
 
 ---
 
-# 💻 Technology Stack
+# 🛠 Technology Stack
 
 ## Frontend
-- React
+
+- React.js
 - TypeScript
 - Tailwind CSS
 - Framer Motion
@@ -60,14 +95,40 @@ CropDiag AI is an end-to-end crop disease diagnosis platform that uses Convoluti
 - Recharts
 
 ## Backend
+
 - Python
 - Flask
 - Flask-CORS
 - SQLite
 - ReportLab
 
-## AI & Machine Learning - TensorFlow - Keras - CNN - Scikit-Learn --- # 🌾 Supported Crops - Tomato - Potato - Rice - Corn (Maize) - Cotton - Apple - Pepper - Grape - Banana - Mango --- # 📁 Project Structure
-text
+## AI & Machine Learning
+
+- TensorFlow
+- Keras
+- CNN
+- Scikit-Learn
+
+---
+
+# 🌾 Supported Crops
+
+- Tomato
+- Potato
+- Rice
+- Corn (Maize)
+- Cotton
+- Apple
+- Pepper
+- Grape
+- Banana
+- Mango
+
+---
+
+# 📁 Project Structure
+
+```text
 crop-disease-diagnosis/
 │
 ├── backend/
@@ -84,51 +145,25 @@ crop-disease-diagnosis/
 │   └── index.html
 │
 └── README.md
---- # ⚙ Installation ## Clone Repository
-bash
-git clone https://github.com/mouni-16102006/crop-disease-diagnosis.git
-## Enter Project
-bash
-cd crop-disease-diagnosis
-## Backend Setup
-bash
-cd backend
-pip install -r requirements.txt
-python init_db.py
-python app.py
-## Frontend Setup Open another terminal
-bash
-cd frontend
-npm install
-npm run dev
-Application runs at
-http://127.0.0.1:8080/
---- # 🗄 Database SQLite stores - Users - Predictions - Disease Details - Crop Information - Reports --- # 🤖 AI Model Model Used - Convolutional Neural Network (CNN) Frameworks - TensorFlow - Keras Fallback - Scikit-Learn MLP Classifier --- # 🎯 Objectives - Detect crop diseases automatically - Improve prediction accuracy - Reduce manual inspection - Provide instant diagnosis - Help farmers make better decisions --- # 📸 Application Screenshots ## 🏠 Homepage <p align="center"> <img src="./sc/website%20.jpeg" width="100%"> </p> ## 📤 Upload Page <p align="center"> <img src="./sc/input.jpeg" width="100%"> </p> ## 🔍 Prediction Result <p align="center"> <img src="./sc/output1.jpeg" width="100%"> </p> ## 💊 Treatment Suggestions <p align="center"> <img src="./sc/reme.jpeg" width="100%"> </p> ## 📚 Crop Encyclopedia <p align="center"> <img src="./sc/ency.jpeg" width="100%"> </p> ## ⚠ Disease Risk Predictor <p align="center"> <img src="./sc/risk%20factor.jpeg" width="100%"> </p> ## 📈 Training Accuracy <p align="center"> <img src="./sc/accuracy.jpeg" width="100%"> </p> --- # 🚀 Future Enhancements - Mobile App - Live Camera Detection - Weather-Based Prediction - Voice Assistant - Fertilizer Recommendation - Multi-language Support
-
-# 🌾 Supported Crops
-
-Tomato • Potato • Rice • Maize • Cotton • Apple • Grape • Pepper • Banana • Mango
-
----
-
-# 📁 Project Structure
-
-```text
-backend/
-frontend/
-README.md
 ```
 
 ---
 
 # ⚙ Installation
 
+## Clone Repository
+
 ```bash
 git clone https://github.com/mouni-16102006/crop-disease-diagnosis.git
+```
+
+## Enter Project
+
+```bash
 cd crop-disease-diagnosis
 ```
 
-Backend
+## Backend Setup
 
 ```bash
 cd backend
@@ -137,7 +172,9 @@ python init_db.py
 python app.py
 ```
 
-Frontend
+## Frontend Setup
+
+Open another terminal
 
 ```bash
 cd frontend
@@ -145,33 +182,111 @@ npm install
 npm run dev
 ```
 
+Application runs at
+
+```
+http://127.0.0.1:8080/
+```
+
 ---
 
-# 📸 Screenshots
+# 🗄 Database
 
-Replace these with your images.
+SQLite stores
 
-- Homepage: `./sc/website.jpeg`
-- Upload: `./sc/input.jpeg`
-- Prediction: `./sc/output1.jpeg`
-- Treatment: `./sc/reme.jpeg`
-- Encyclopedia: `./sc/ency.jpeg`
-- Risk: `./sc/risk factor.jpeg`
+- Users
+- Predictions
+- Disease Details
+- Crop Information
+- Reports
+
+---
+
+# 🤖 AI Model
+
+Model Used
+
+- Convolutional Neural Network (CNN)
+
+Frameworks
+
+- TensorFlow
+- Keras
+
+Fallback
+
+- Scikit-Learn MLP Classifier
+
+---
+
+# 🎯 Objectives
+
+- Detect crop diseases automatically
+- Improve prediction accuracy
+- Reduce manual inspection
+- Provide instant diagnosis
+- Help farmers make better decisions
+
+---
+
+# 📸 Application Screenshots
+
+## 🏠 Homepage
+
+<p align="center">
+<img src="./sc/website%20.jpeg" width="100%">
+</p>
+
+## 📤 Upload Page
+
+<p align="center">
+<img src="./sc/input.jpeg" width="100%">
+</p>
+
+## 🔍 Prediction Result
+
+<p align="center">
+<img src="./sc/output1.jpeg" width="100%">
+</p>
+
+## 💊 Treatment Suggestions
+
+<p align="center">
+<img src="./sc/reme.jpeg" width="100%">
+</p>
+
+## 📚 Crop Encyclopedia
+
+<p align="center">
+<img src="./sc/ency.jpeg" width="100%">
+</p>
+
+## ⚠ Disease Risk Predictor
+
+<p align="center">
+<img src="./sc/risk%20factor.jpeg" width="100%">
+</p>
+
+## 📈 Training Accuracy
+
+<p align="center">
+<img src="./sc/accuracy.jpeg" width="100%">
+</p>
 
 ---
 
 # 🚀 Future Enhancements
 
-- Mobile application
-- Live camera diagnosis
-- Weather integration
-- Voice assistant
-- Fertilizer recommendation
-- Multilingual support
+- Mobile App
+- Live Camera Detection
+- Weather-Based Prediction
+- Voice Assistant
+- Fertilizer Recommendation
+- Multi-language Support
 
 ---
 
-# 👩‍💻 Developer
+# 👩‍💻 Developed By
 
 **Mounisha P**
 
@@ -179,14 +294,12 @@ B.Tech – Artificial Intelligence and Data Science
 
 VSB Engineering College
 
-GitHub: https://github.com/mouni-16102006
-
-LinkedIn: Add your LinkedIn profile here.
+Karur, Tamil Nadu
 
 ---
 
-# ⭐ Support
+# 📄 License
 
-If you like this project, please ⭐ the repository.
+This project is developed for academic and educational purposes.
 
-Made with ❤️ by **Mounisha P**
+© 2026 Mounisha P. All Rights Reserved.     this my read mee change more more proffesion in technolgy  i want like sc and add my github id in last more more attaractive
