@@ -83,32 +83,86 @@ This AI-powered web application uses **Convolutional Neural Networks (CNN)** to 
 
 ---
 
-# 🛠 Technology Stack
+# 💻 Technology Stack
 
-## Frontend
+## 🎨 Frontend
 
-- React.js
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-- Axios
-- Recharts
+<p>
 
-## Backend
+<img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react">
 
-- Python
-- Flask
-- Flask-CORS
-- SQLite
-- ReportLab
+<img src="https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript">
 
-## AI & Machine Learning
+<img src="https://img.shields.io/badge/Vite-5-purple?style=for-the-badge&logo=vite">
 
-- TensorFlow
-- Keras
-- CNN
-- Scikit-Learn
+<img src="https://img.shields.io/badge/TailwindCSS-3-06B6D4?style=for-the-badge&logo=tailwindcss">
 
+<img src="https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge">
+
+<img src="https://img.shields.io/badge/Axios-API-purple?style=for-the-badge">
+
+</p>
+
+### Architecture
+
+- Responsive UI
+- Dark Mode
+- Dashboard
+- Charts (Recharts)
+- Protected Routes
+- Authentication
+- Image Upload
+
+---
+
+## ⚙ Backend
+
+<p>
+
+<img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python">
+
+<img src="https://img.shields.io/badge/Flask-black?style=for-the-badge&logo=flask">
+
+<img src="https://img.shields.io/badge/SQLite-Database-blue?style=for-the-badge">
+
+<img src="https://img.shields.io/badge/REST_API-success?style=for-the-badge">
+
+<img src="https://img.shields.io/badge/ReportLab-PDF-red?style=for-the-badge">
+
+</p>
+
+### Backend Features
+
+- CNN Prediction API
+- RESTful Services
+- PDF Report Generation
+- Authentication
+- Prediction History
+- Disease Database
+
+---
+
+## 🤖 AI / Machine Learning
+
+<p>
+
+<img src="https://img.shields.io/badge/TensorFlow-orange?style=for-the-badge&logo=tensorflow">
+
+<img src="https://img.shields.io/badge/Keras-red?style=for-the-badge&logo=keras">
+
+<img src="https://img.shields.io/badge/CNN-Deep_Learning-success?style=for-the-badge">
+
+<img src="https://img.shields.io/badge/Scikit--Learn-yellow?style=for-the-badge&logo=scikitlearn">
+
+</p>
+
+### AI Features
+
+- CNN Classification
+- Image Preprocessing
+- Confidence Score
+- Data Augmentation
+- Feature Extraction
 ---
 
 # 🌾 Supported Crops
