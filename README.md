@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="./backend/static/logo.svg" alt="CropDiag AI Logo" width="150" height="150">
-</p>
 
-<h1 align="center">🌱 Automated Crop Disease Diagnosis using CNN</h1>
 
 <p align="center">
 AI-Powered Crop Disease Detection using Deep Learning (CNN)
