@@ -13,22 +13,10 @@ AI Powered Crop Disease Diagnosis using Deep Learning (CNN)
 
 <p align="center">
 
-<img src="https://img.shields.io/badge/Version-v2.0-success?style=for-the-badge">
-
-<img src="https://img.shields.io/badge/Status-Live-brightgreen?style=for-the-badge">
-
-
-![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)
-
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)
-
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.18-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
-
-<img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
-
-</p>
-
-</p>
+![Status](https://img.shields.io/badge/Status-Live-brightgreen?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-CNN-orange?style=for-the-badge&logo=tensorflow)
 
 <p align="center">
 
