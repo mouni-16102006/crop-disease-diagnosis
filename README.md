@@ -66,33 +66,44 @@ CropDiag AI is an end-to-end crop disease diagnosis platform that uses Convoluti
 - SQLite
 - ReportLab
 
-## AI
-- TensorFlow
-- Keras
-- CNN
-- Scikit-Learn
-
----
-
-# 🏗 System Architecture
-
-```text
-Leaf Image
-   │
-Upload
-   │
-Preprocessing
-   │
-CNN Model
-   │
-Prediction
-   │
-Treatment Recommendation
-   │
-PDF Report
-```
-
----
+## AI & Machine Learning - TensorFlow - Keras - CNN - Scikit-Learn --- # 🌾 Supported Crops - Tomato - Potato - Rice - Corn (Maize) - Cotton - Apple - Pepper - Grape - Banana - Mango --- # 📁 Project Structure
+text
+crop-disease-diagnosis/
+│
+├── backend/
+│   ├── app.py
+│   ├── train_model.py
+│   ├── init_db.py
+│   ├── requirements.txt
+│   ├── disease_model.h5
+│   └── static/
+│
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── index.html
+│
+└── README.md
+--- # ⚙ Installation ## Clone Repository
+bash
+git clone https://github.com/mouni-16102006/crop-disease-diagnosis.git
+## Enter Project
+bash
+cd crop-disease-diagnosis
+## Backend Setup
+bash
+cd backend
+pip install -r requirements.txt
+python init_db.py
+python app.py
+## Frontend Setup Open another terminal
+bash
+cd frontend
+npm install
+npm run dev
+Application runs at
+http://127.0.0.1:8080/
+--- # 🗄 Database SQLite stores - Users - Predictions - Disease Details - Crop Information - Reports --- # 🤖 AI Model Model Used - Convolutional Neural Network (CNN) Frameworks - TensorFlow - Keras Fallback - Scikit-Learn MLP Classifier --- # 🎯 Objectives - Detect crop diseases automatically - Improve prediction accuracy - Reduce manual inspection - Provide instant diagnosis - Help farmers make better decisions --- # 📸 Application Screenshots ## 🏠 Homepage <p align="center"> <img src="./sc/website%20.jpeg" width="100%"> </p> ## 📤 Upload Page <p align="center"> <img src="./sc/input.jpeg" width="100%"> </p> ## 🔍 Prediction Result <p align="center"> <img src="./sc/output1.jpeg" width="100%"> </p> ## 💊 Treatment Suggestions <p align="center"> <img src="./sc/reme.jpeg" width="100%"> </p> ## 📚 Crop Encyclopedia <p align="center"> <img src="./sc/ency.jpeg" width="100%"> </p> ## ⚠ Disease Risk Predictor <p align="center"> <img src="./sc/risk%20factor.jpeg" width="100%"> </p> ## 📈 Training Accuracy <p align="center"> <img src="./sc/accuracy.jpeg" width="100%"> </p> --- # 🚀 Future Enhancements - Mobile App - Live Camera Detection - Weather-Based Prediction - Voice Assistant - Fertilizer Recommendation - Multi-language Support
 
 # 🌾 Supported Crops
 
