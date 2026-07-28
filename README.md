@@ -1,8 +1,4 @@
 
-
-<p align="center">
-AI-Powered Crop Disease Detection using Deep Learning (CNN)
-</p>
 <p align="center">
 <img src="./backend/static/logo.svg" width="170">
 </p>
